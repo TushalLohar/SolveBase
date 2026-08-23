@@ -92,6 +92,13 @@ export const Route = createRootRoute({
       { rel: "icon", type: "image/png", sizes: "96x96", href: "/favicon-96.png" },
       { rel: "icon", type: "image/png", sizes: "192x192", href: "/favicon-192.png" },
     ],
+    scripts: [
+      {
+        src: "https://datafast.app/js/script.js",
+        defer: true,
+        "data-website-id": "cmt5mj8kl00046gaapgjc3w6a",
+      },
+    ],
   }),
 
   shellComponent: RootShell,
