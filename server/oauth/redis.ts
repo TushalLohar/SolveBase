@@ -11,7 +11,7 @@ async function command(commandValue: RedisCommand): Promise<unknown> {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(commandValue),
-    signal: AbortSignal.timeout(5000),
+    signal: AbortSignal.timeout(1500),
   });
   if (!response.ok) throw new Error("OAuth storage request failed");
   const payload = (await response.json()) as { result?: unknown; error?: unknown };

@@ -17,6 +17,13 @@ export function clientIp(request: RequestLike): string {
   return request.socket?.remoteAddress || "unknown";
 }
 
+export class PayloadTooLargeError extends Error {
+  constructor(message = "Request body too large") {
+    super(message);
+    this.name = "PayloadTooLargeError";
+  }
+}
+
 export const SECURITY_HEADERS: Record<string, string> = {
   "Cache-Control": "no-store",
   "Content-Security-Policy": "default-src 'none'; frame-ancestors 'none'",
@@ -29,8 +36,20 @@ export const SECURITY_HEADERS: Record<string, string> = {
 
 export async function readJson(
   request: RequestLike,
-  maxBytes = 16000,
+  maxBytes = 2048,
+  timeoutMs = 3000,
 ): Promise<Record<string, unknown>> {
+  const contentLengthHeader = request.headers?.["content-length"];
+  if (contentLengthHeader) {
+    const rawValue = Array.isArray(contentLengthHeader)
+      ? contentLengthHeader[0]
+      : contentLengthHeader;
+    const contentLength = parseInt(rawValue ?? "", 10);
+    if (Number.isFinite(contentLength) && contentLength > maxBytes) {
+      throw new PayloadTooLargeError();
+    }
+  }
+
   if (request.body !== undefined) {
     let serialized: string;
     try {
@@ -39,41 +58,61 @@ export async function readJson(
       throw new Error("Invalid JSON body");
     }
     if (Buffer.byteLength(serialized, "utf8") > maxBytes) {
-      throw new Error("Request body too large");
+      throw new PayloadTooLargeError();
     }
     if (!request.body || typeof request.body !== "object" || Array.isArray(request.body)) {
       throw new Error("Invalid JSON body");
     }
     return request.body as Record<string, unknown>;
   }
+
   return new Promise((resolve, reject) => {
     let body = "";
     let settled = false;
+
+    const timer = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      try {
+        request.destroy?.();
+      } catch {
+        // ignore
+      }
+      reject(new Error("Request body read timeout"));
+    }, timeoutMs);
+
+    const cleanup = () => {
+      clearTimeout(timer);
+    };
+
     request.setEncoding("utf8");
     request.on("data", (chunk: string) => {
       if (settled) return;
       body += chunk;
       if (Buffer.byteLength(body, "utf8") > maxBytes) {
         settled = true;
+        cleanup();
         body = "";
-        reject(new Error("Request body too large"));
+        reject(new PayloadTooLargeError());
       }
     });
     request.on("end", () => {
       if (settled) return;
       settled = true;
+      cleanup();
       try {
         const parsed = JSON.parse(body || "{}");
         if (!parsed || typeof parsed !== "object" || Array.isArray(parsed))
           throw new Error("Invalid JSON body");
         resolve(parsed as Record<string, unknown>);
-      } catch {
-        reject(new Error("Invalid JSON body"));
+      } catch (error) {
+        reject(error instanceof PayloadTooLargeError ? error : new Error("Invalid JSON body"));
       }
     });
     request.on("error", () => {
       if (settled) return;
       settled = true;
+      cleanup();
       reject(new Error("Request body could not be read"));
     });
   });
@@ -101,6 +140,29 @@ export function sendJson(
     ...headers,
   });
   response.end(JSON.stringify(body));
+}
+
+export function rateLimited(
+  response: ServerResponse,
+  retryAfter: number,
+  headers: Record<string, string> = {},
+): void {
+  sendJson(
+    response,
+    429,
+    { error: "rate_limited" },
+    {
+      "Retry-After": String(retryAfter),
+      ...headers,
+    },
+  );
+}
+
+export function payloadTooLarge(
+  response: ServerResponse,
+  headers: Record<string, string> = {},
+): void {
+  sendJson(response, 413, { error: "payload_too_large" }, headers);
 }
 
 export function redirect(response: ServerResponse, location: string): void {

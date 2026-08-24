@@ -3,11 +3,29 @@
   "outputDirectory": "dist/client",
   "functions": {
     "api/**/*.ts": {
-      "maxDuration": 30,
+      "maxDuration": 10,
       "includeFiles": "server/oauth/**"
     }
   },
   "headers": [
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(.*\\.(?:png|ico|svg|jpg|jpeg|webp|woff2|woff|ttf))",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
     {
       "source": "/(.*)",
       "headers": [

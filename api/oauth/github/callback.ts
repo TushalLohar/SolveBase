@@ -39,7 +39,12 @@ export default async function handler(
   }
 
   try {
-    await enforceRateLimit("callback", clientIp(request), 120, 600);
+    await enforceRateLimit("callback", clientIp(request), 120, 600, {
+      burstLimit: 15,
+      burstWindowSeconds: 5,
+      globalLimit: 600,
+      globalWindowSeconds: 60,
+    });
     const params = requestUrl(request).searchParams;
     const state = params.get("state") || "";
     if (!/^[A-Za-z0-9_-]{40,128}$/.test(state)) {
@@ -86,7 +91,7 @@ export default async function handler(
         code,
         redirect_uri: config.githubCallbackUrl,
       }),
-      signal: AbortSignal.timeout(10000),
+      signal: AbortSignal.timeout(5000),
     });
     const tokenData = (await tokenResponse.json()) as GithubTokenResponse;
     const token = tokenData.access_token;

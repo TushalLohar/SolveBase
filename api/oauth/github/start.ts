@@ -37,7 +37,12 @@ export default async function handler(
     return;
   }
   try {
-    await enforceRateLimit("start", clientIp(request), 60, 600);
+    await enforceRateLimit("start", clientIp(request), 60, 600, {
+      burstLimit: 10,
+      burstWindowSeconds: 5,
+      globalLimit: 600,
+      globalWindowSeconds: 60,
+    });
     const challenge = requestUrl(request).searchParams.get("challenge") || "";
     const clientState = requestUrl(request).searchParams.get("client_state") || "";
     if (

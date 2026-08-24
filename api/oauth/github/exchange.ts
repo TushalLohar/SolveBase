@@ -5,6 +5,9 @@ import { decryptJson, equalSecret, sha256, sha256Base64Url } from "../../../serv
 import {
   clientIp,
   corsHeaders,
+  PayloadTooLargeError,
+  payloadTooLarge,
+  rateLimited,
   readJson,
   SECURITY_HEADERS,
   sendJson,
@@ -45,7 +48,12 @@ export default async function handler(
   }
 
   try {
-    await enforceRateLimit("exchange", clientIp(request), 60, 600);
+    await enforceRateLimit("exchange", clientIp(request), 60, 600, {
+      burstLimit: 10,
+      burstWindowSeconds: 5,
+      globalLimit: 600,
+      globalWindowSeconds: 60,
+    });
     const contentType = String(request.headers["content-type"] || "")
       .split(";", 1)[0]
       ?.trim()
@@ -88,12 +96,11 @@ export default async function handler(
     sendJson(response, 200, { token: finalPayload.token }, headers);
   } catch (error) {
     if (error instanceof RateLimitError) {
-      sendJson(
-        response,
-        429,
-        { error: "rate_limited" },
-        { ...headers, "Retry-After": String(error.retryAfter) },
-      );
+      rateLimited(response, error.retryAfter, headers);
+      return;
+    }
+    if (error instanceof PayloadTooLargeError) {
+      payloadTooLarge(response, headers);
       return;
     }
     sendJson(response, 500, { error: "oauth_unavailable" }, headers);

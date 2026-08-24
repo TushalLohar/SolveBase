@@ -260,4 +260,62 @@ await exchangeHandler(
 assert.equal(validPreflightResponse.status, 204);
 assert.equal(validPreflightResponse.headers["Access-Control-Allow-Origin"], extensionOrigin);
 
+// DDoS Mitigation Test 1: Payload size limit (413 Payload Too Large)
+const oversizedPayloadResponse = new MockResponse();
+await exchangeHandler(
+  request("POST", "/api/oauth/github/exchange", {
+    code: secondCode,
+    verifier: "x".repeat(3000),
+  }) as never,
+  oversizedPayloadResponse as never,
+);
+assert.equal(oversizedPayloadResponse.status, 413);
+assert.equal(JSON.parse(oversizedPayloadResponse.body).error, "payload_too_large");
+
+// DDoS Mitigation Test 2: Content-Length header pre-check (413 Payload Too Large)
+const oversizedHeaderRequest = {
+  method: "POST",
+  url: "/api/oauth/github/exchange",
+  body: { code: secondCode, verifier },
+  headers: {
+    origin: extensionOrigin,
+    "content-type": "application/json",
+    "content-length": "50000",
+    "x-forwarded-for": "203.0.113.55",
+  },
+};
+const oversizedHeaderResponse = new MockResponse();
+await exchangeHandler(oversizedHeaderRequest as never, oversizedHeaderResponse as never);
+assert.equal(oversizedHeaderResponse.status, 413);
+assert.equal(JSON.parse(oversizedHeaderResponse.body).error, "payload_too_large");
+
+// DDoS Mitigation Test 3: In-Memory L1 burst rate limiter blocks high-frequency flooding
+const floodIp = "198.51.100.99";
+let blocked429Count = 0;
+for (let i = 0; i < 15; i++) {
+  const floodResponse = new MockResponse();
+  await exchangeHandler(
+    {
+      method: "POST",
+      url: "/api/oauth/github/exchange",
+      body: { code: "a".repeat(40), verifier: "b".repeat(43) },
+      headers: {
+        origin: extensionOrigin,
+        "content-type": "application/json",
+        "x-forwarded-for": floodIp,
+      },
+    } as never,
+    floodResponse as never,
+  );
+  if (floodResponse.status === 429) {
+    blocked429Count += 1;
+    assert.ok(floodResponse.headers["Retry-After"]);
+    assert.equal(JSON.parse(floodResponse.body).error, "rate_limited");
+  }
+}
+assert.ok(
+  blocked429Count >= 5,
+  `Expected at least 5 blocked burst requests, got ${blocked429Count}`,
+);
+
 process.stdout.write("OAuth flow test: ok\n");
