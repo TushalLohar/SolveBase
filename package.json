@@ -49,5 +49,58 @@
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.56.1",
     "vite": "^8.1.5"
+  },
+  "overrides": {
+    "@eslint-community/eslint-utils": {
+      "js-yaml": "4.3.2"
+    },
+    "@eslint/eslintrc": {
+      "js-yaml": "4.3.2"
+    },
+    "@tanstack/react-start": {
+      "js-yaml": "4.3.2"
+    },
+    "@tanstack/react-start-rsc": {
+      "js-yaml": "4.3.2"
+    },
+    "@tanstack/start-plugin-core": {
+      "js-yaml": "4.3.2"
+    },
+    "@typescript-eslint/eslint-plugin": {
+      "js-yaml": "4.3.2"
+    },
+    "@typescript-eslint/parser": {
+      "js-yaml": "4.3.2"
+    },
+    "@typescript-eslint/type-utils": {
+      "js-yaml": "4.3.2"
+    },
+    "@typescript-eslint/utils": {
+      "js-yaml": "4.3.2"
+    },
+    "eslint": {
+      "js-yaml": "4.3.2"
+    },
+    "eslint-config-prettier": {
+      "js-yaml": "4.3.2"
+    },
+    "eslint-plugin-prettier": {
+      "js-yaml": "4.3.2"
+    },
+    "eslint-plugin-react-hooks": {
+      "js-yaml": "4.3.2"
+    },
+    "eslint-plugin-react-refresh": {
+      "js-yaml": "4.3.2"
+    },
+    "js-yaml": {
+      "js-yaml": "4.3.2"
+    },
+    "typescript-eslint": {
+      "js-yaml": "4.3.2"
+    },
+    "xmlbuilder2": {
+      "js-yaml": "4.3.2"
+    }
   }
 }
