@@ -45,7 +45,6 @@ function CodeforcesGuide() {
         >
           Install SolveBase free
         </a>
-
         <section className="mt-16 grid gap-4 sm:grid-cols-2">
           {[
             [
@@ -68,7 +67,6 @@ function CodeforcesGuide() {
             </div>
           ))}
         </section>
-
         <section className="mt-20 border-y border-border py-10">
           <h2 className="text-3xl font-black">A Codeforces practice log that maintains itself</h2>
           <p className="mt-4 leading-7 text-muted-foreground">
@@ -77,7 +75,6 @@ function CodeforcesGuide() {
             searchable contribution while you stay focused on the contest or problem.
           </p>
         </section>
-
         <section className="mt-16">
           <h2 className="text-3xl font-black">Supported competitive-programming workflow</h2>
           <p className="mt-4 leading-7 text-muted-foreground">

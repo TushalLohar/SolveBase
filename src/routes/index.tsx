@@ -21,11 +21,11 @@ const SITE_URL = "https://solvebase.dev";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "SolveBase — Live CP Solves to GitHub" },
+      { title: "SolveBase — Competitive Programming Solutions to GitHub" },
       {
         name: "description",
         content:
-          "SolveBase is a lightweight Chrome extension that automatically saves your accepted Codeforces, LeetCode, CSES, CodeChef, and GeeksforGeeks solutions to GitHub, organized cleanly by rating, topic, and difficulty, with a self-updating summary.",
+          "Save accepted Codeforces, LeetCode, CSES, CodeChef, and GeeksforGeeks solutions to GitHub automatically with the free SolveBase Chrome extension.",
       },
       {
         property: "og:title",
@@ -34,7 +34,7 @@ export const Route = createFileRoute("/")({
       {
         property: "og:description",
         content:
-          "Keep solving. SolveBase files every accepted solution into the right folder on GitHub automatically.",
+          "Automatically save accepted competitive programming solutions from Codeforces, LeetCode, CSES, CodeChef, and GFG to GitHub.",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: SITE_URL },
@@ -42,10 +42,11 @@ export const Route = createFileRoute("/")({
       { property: "og:image", content: `${SITE_URL}/og-image.png` },
       { property: "og:image:alt", content: "SolveBase live coding solution sync" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "SolveBase — Live CP Solves to GitHub" },
+      { name: "twitter:title", content: "SolveBase — Competitive Programming Solutions to GitHub" },
       {
         name: "twitter:description",
-        content: "Automatically organize accepted competitive-programming solutions in GitHub.",
+        content:
+          "Automatically organize accepted competitive programming solutions from five coding platforms in GitHub.",
       },
       { name: "twitter:image", content: `${SITE_URL}/og-image.png` },
     ],
@@ -62,7 +63,7 @@ export const Route = createFileRoute("/")({
               applicationCategory: "DeveloperApplication",
               operatingSystem: "Chrome, Edge, Brave, Arc",
               description:
-                "A browser extension that syncs accepted competitive-programming solutions to GitHub.",
+                "A Chrome browser extension that automatically saves accepted Codeforces, LeetCode, CSES, CodeChef, and GeeksforGeeks solutions to GitHub.",
               url: SITE_URL,
               downloadUrl: CHROME_WEB_STORE_URL,
               softwareVersion: "1.0.0",
@@ -325,6 +326,21 @@ const FAQS = [
       "SolveBase supports Codeforces, standard LeetCode problem pages, CSES, CodeChef, and GeeksforGeeks. LeetCode contest and Explore editors are not supported in version 1.0.0.",
   },
   {
+    question: "Can I save Codeforces solutions to GitHub automatically?",
+    answer:
+      "Yes. SolveBase watches Codeforces verdicts, waits for the final accepted result, and commits the solution to a GitHub rating folder.",
+  },
+  {
+    question: "Can I save LeetCode solutions to GitHub automatically?",
+    answer:
+      "Yes. On standard LeetCode problem pages, SolveBase detects an accepted submission and saves the solution under an organized LeetCode topic folder in GitHub.",
+  },
+  {
+    question: "Does SolveBase support CodeChef, CSES, and GeeksforGeeks?",
+    answer:
+      "Yes. SolveBase supports accepted submissions from CodeChef, CSES, and GeeksforGeeks practice pages alongside Codeforces and standard LeetCode problems.",
+  },
+  {
     question: "Does SolveBase upload source code to its own server?",
     answer:
       "No. The extension sends repository updates directly to GitHub. The SolveBase OAuth service handles only the short-lived GitHub authorization exchange.",
@@ -387,9 +403,6 @@ function Home() {
           <a href="#faq-title" className="nav-link">
             FAQ
           </a>
-          <a href="/leetcode-to-github" className="nav-link">
-            Guides
-          </a>
         </nav>
         <a href={CHROME_WEB_STORE_URL} target="_blank" rel="noreferrer" className="cta-small">
           <Download className="h-3.5 w-3.5" /> Install free
@@ -410,8 +423,9 @@ function Home() {
             <span className="ink-highlight">Keep it.</span>
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
-            SolveBase quietly turns every accepted submission into a clean, searchable GitHub
-            archive. You focus on the verdict. Your portfolio keeps growing.
+            SolveBase quietly turns every accepted Codeforces, LeetCode, CSES, CodeChef, or
+            GeeksforGeeks submission into a clean, searchable GitHub archive. You focus on the
+            verdict. Your portfolio keeps growing.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <a href={CHROME_WEB_STORE_URL} target="_blank" rel="noreferrer" className="cta-primary">
@@ -795,8 +809,6 @@ function Home() {
         </div>
         <span className="font-mono text-xs text-muted-foreground">Live CP solution syncing</span>
         <nav className="flex gap-5 font-mono text-xs text-muted-foreground">
-          <a href="/leetcode-to-github">LeetCode guide</a>
-          <a href="/codeforces-to-github">Codeforces guide</a>
           <a href="/privacy">Privacy</a>
           <a
             href="https://github.com/TushalLohar/SolveBase/issues"

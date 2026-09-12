@@ -77,7 +77,6 @@ function LeetCodeGuide() {
         >
           Install SolveBase free
         </a>
-
         <div className="mt-16 grid gap-8 sm:grid-cols-3">
           {[
             ["1", "Connect GitHub", "Choose the repository where your practice belongs."],
@@ -91,7 +90,6 @@ function LeetCodeGuide() {
             </section>
           ))}
         </div>
-
         <section className="mt-20 border-y border-border py-10">
           <h2 className="text-3xl font-black">Why keep LeetCode solutions in GitHub?</h2>
           <p className="mt-4 leading-7 text-muted-foreground">
@@ -100,7 +98,6 @@ function LeetCodeGuide() {
             after accepted submissions, so your practice record doubles as portfolio proof.
           </p>
         </section>
-
         <section className="mt-16">
           <h2 className="text-3xl font-black">LeetCode to GitHub FAQ</h2>
           <div className="mt-8 space-y-6">
