@@ -339,6 +339,21 @@ const FAQS = [
     answer:
       "No. SolveBase focuses on live accepted submissions. Existing compatible files are indexed when you connect a repository, but old platform submissions are not scraped in bulk.",
   },
+  {
+    question: "How do I save coding solutions to GitHub automatically?",
+    answer:
+      "Install SolveBase from the Chrome Web Store, connect GitHub, choose a repository, and keep solving. When a supported judge reports an accepted verdict, SolveBase commits the solution directly to GitHub.",
+  },
+  {
+    question: "Is SolveBase free and which browsers support it?",
+    answer:
+      "SolveBase is free to install and works in Chromium-based browsers such as Chrome, Edge, Brave, and Arc. The extension uses Manifest V3 and does not require a SolveBase account.",
+  },
+  {
+    question: "Does SolveBase work for interview preparation?",
+    answer:
+      "Yes. It creates a searchable GitHub archive of accepted practice problems, making it easier to review patterns, show consistent practice, and keep a public coding portfolio up to date.",
+  },
 ];
 
 function Home() {
@@ -371,6 +386,9 @@ function Home() {
           </a>
           <a href="#faq-title" className="nav-link">
             FAQ
+          </a>
+          <a href="/leetcode-to-github" className="nav-link">
+            Guides
           </a>
         </nav>
         <a href={CHROME_WEB_STORE_URL} target="_blank" rel="noreferrer" className="cta-small">
@@ -777,6 +795,8 @@ function Home() {
         </div>
         <span className="font-mono text-xs text-muted-foreground">Live CP solution syncing</span>
         <nav className="flex gap-5 font-mono text-xs text-muted-foreground">
+          <a href="/leetcode-to-github">LeetCode guide</a>
+          <a href="/codeforces-to-github">Codeforces guide</a>
           <a href="/privacy">Privacy</a>
           <a
             href="https://github.com/TushalLohar/SolveBase/issues"

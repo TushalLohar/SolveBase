@@ -10,11 +10,23 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CodeforcesToGithubRouteImport } from './routes/codeforces-to-github'
+import { Route as LeetcodeToGithubRouteImport } from './routes/leetcode-to-github'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CodeforcesToGithubRoute = CodeforcesToGithubRouteImport.update({
+  id: '/codeforces-to-github',
+  path: '/codeforces-to-github',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LeetcodeToGithubRoute = LeetcodeToGithubRouteImport.update({
+  id: '/leetcode-to-github',
+  path: '/leetcode-to-github',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacyRoute = PrivacyRouteImport.update({
@@ -25,27 +37,40 @@ const PrivacyRoute = PrivacyRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/codeforces-to-github': typeof CodeforcesToGithubRoute
+  '/leetcode-to-github': typeof LeetcodeToGithubRoute
   '/privacy': typeof PrivacyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/codeforces-to-github': typeof CodeforcesToGithubRoute
+  '/leetcode-to-github': typeof LeetcodeToGithubRoute
   '/privacy': typeof PrivacyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/codeforces-to-github': typeof CodeforcesToGithubRoute
+  '/leetcode-to-github': typeof LeetcodeToGithubRoute
   '/privacy': typeof PrivacyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/privacy'
+  fullPaths: '/' | '/codeforces-to-github' | '/leetcode-to-github' | '/privacy'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/privacy'
-  id: '__root__' | '/' | '/privacy'
+  to: '/' | '/codeforces-to-github' | '/leetcode-to-github' | '/privacy'
+  id:
+    | '__root__'
+    | '/'
+    | '/codeforces-to-github'
+    | '/leetcode-to-github'
+    | '/privacy'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CodeforcesToGithubRoute: typeof CodeforcesToGithubRoute
+  LeetcodeToGithubRoute: typeof LeetcodeToGithubRoute
   PrivacyRoute: typeof PrivacyRoute
 }
 
@@ -56,6 +81,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/codeforces-to-github': {
+      id: '/codeforces-to-github'
+      path: '/codeforces-to-github'
+      fullPath: '/codeforces-to-github'
+      preLoaderRoute: typeof CodeforcesToGithubRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/leetcode-to-github': {
+      id: '/leetcode-to-github'
+      path: '/leetcode-to-github'
+      fullPath: '/leetcode-to-github'
+      preLoaderRoute: typeof LeetcodeToGithubRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacy': {
@@ -70,6 +109,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CodeforcesToGithubRoute: CodeforcesToGithubRoute,
+  LeetcodeToGithubRoute: LeetcodeToGithubRoute,
   PrivacyRoute: PrivacyRoute,
 }
 export const routeTree = rootRouteImport
