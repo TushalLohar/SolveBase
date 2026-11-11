@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { faqSchema, seoHead, SITE_URL } from "../lib/seo";
 import {
   Download,
   FolderTree,
@@ -13,81 +14,47 @@ import {
 
 const CHROME_WEB_STORE_URL =
   "https://chromewebstore.google.com/detail/solvebase-solves-to-githu/caeobmhokccipmdinfcajpagikggollm";
-const SITE_URL = "https://solvebase.dev";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "SolveBase — Competitive Programming Solutions to GitHub" },
-      {
-        name: "description",
-        content:
-          "Save accepted Codeforces, LeetCode, CSES, CodeChef, and GeeksforGeeks solutions to GitHub automatically with the free SolveBase Chrome extension.",
-      },
-      {
-        property: "og:title",
-        content: "SolveBase — Codeforces, LeetCode, CSES, CodeChef & GFG to GitHub",
-      },
-      {
-        property: "og:description",
-        content:
-          "Automatically save accepted competitive programming solutions from Codeforces, LeetCode, CSES, CodeChef, and GFG to GitHub.",
-      },
-      { property: "og:type", content: "website" },
-      { property: "og:url", content: SITE_URL },
-      { property: "og:site_name", content: "SolveBase" },
-      { property: "og:image", content: `${SITE_URL}/og-image.png` },
-      { property: "og:image:alt", content: "SolveBase live coding solution sync" },
-      { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "SolveBase — Competitive Programming Solutions to GitHub" },
-      {
-        name: "twitter:description",
-        content:
-          "Automatically organize accepted competitive programming solutions from five coding platforms in GitHub.",
-      },
-      { name: "twitter:image", content: `${SITE_URL}/og-image.png` },
-    ],
-    links: [{ rel: "canonical", href: SITE_URL }],
-    scripts: [
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@graph": [
-            {
-              "@type": "SoftwareApplication",
-              name: "SolveBase",
-              applicationCategory: "DeveloperApplication",
-              operatingSystem: "Chrome, Edge, Brave, Arc",
-              description:
-                "A Chrome browser extension that automatically saves accepted Codeforces, LeetCode, CSES, CodeChef, and GeeksforGeeks solutions to GitHub.",
-              url: SITE_URL,
-              downloadUrl: CHROME_WEB_STORE_URL,
-              softwareVersion: "1.0.0",
-              author: { "@type": "Person", name: "Tushal Lohar" },
-              offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-            },
-            {
-              "@type": "Organization",
-              name: "SolveBase",
-              url: SITE_URL,
-              logo: `${SITE_URL}/solvebase-brand.png`,
-              sameAs: ["https://github.com/TushalLohar"],
-            },
-            { "@type": "WebSite", name: "SolveBase", url: SITE_URL },
-            {
-              "@type": "FAQPage",
-              mainEntity: FAQS.map((item) => ({
-                "@type": "Question",
-                name: item.question,
-                acceptedAnswer: { "@type": "Answer", text: item.answer },
-              })),
-            },
-          ],
-        }),
-      },
-    ],
-  }),
+  head: () =>
+    seoHead({
+      path: "/",
+      title: "SolveBase — Competitive Programming Solutions to GitHub",
+      description:
+        "Save accepted Codeforces, LeetCode, CSES, CodeChef, and GeeksforGeeks solutions to GitHub automatically with the free SolveBase Chrome extension.",
+      schemas: [
+        {
+          "@type": "SoftwareApplication",
+          "@id": `${SITE_URL}/#software`,
+          name: "SolveBase",
+          applicationCategory: "DeveloperApplication",
+          operatingSystem: "Chrome, Edge, Brave, Arc",
+          description:
+            "A Chrome browser extension that automatically saves accepted Codeforces, LeetCode, CSES, CodeChef, and GeeksforGeeks solutions to GitHub.",
+          url: `${SITE_URL}/`,
+          downloadUrl: CHROME_WEB_STORE_URL,
+          softwareVersion: "1.0.0",
+          author: { "@type": "Person", name: "Tushal Lohar" },
+          offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+        },
+        {
+          "@type": "Organization",
+          "@id": `${SITE_URL}/#organization`,
+          name: "SolveBase",
+          url: `${SITE_URL}/`,
+          logo: `${SITE_URL}/solvebase-brand.png`,
+          sameAs: ["https://github.com/TushalLohar"],
+        },
+        {
+          "@type": "WebSite",
+          "@id": `${SITE_URL}/#website`,
+          name: "SolveBase",
+          url: `${SITE_URL}/`,
+          publisher: { "@id": `${SITE_URL}/#organization` },
+        },
+        faqSchema(FAQS),
+      ],
+    }),
   component: Home,
 });
 
@@ -757,6 +724,18 @@ function Home() {
           ))}
         </div>
       </section>
+
+      <nav aria-label="Platform guides" className="border-t border-border py-8">
+        <h2 className="font-mono text-sm font-bold">Platform guides</h2>
+        <div className="mt-3 flex flex-wrap gap-x-6 gap-y-3 text-sm">
+          <a href="/leetcode-to-github" className="underline underline-offset-4">
+            Save LeetCode solutions to GitHub
+          </a>
+          <a href="/codeforces-to-github" className="underline underline-offset-4">
+            Save Codeforces solutions to GitHub
+          </a>
+        </div>
+      </nav>
 
       <footer className="site-footer">
         <div className="flex items-center gap-3">
