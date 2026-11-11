@@ -250,8 +250,7 @@ button {
 .settings-row,
 .feedback-actions a,
 .mini-badge,
-.setup-card,
-.github-connect-row {
+.setup-card {
   border: 1px solid var(--line);
   border-radius: 9px;
   background: var(--surface);
