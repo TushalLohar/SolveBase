@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
+import { CHROME_WEB_STORE_URL } from "../src/lib/product.ts";
 
 const local = new Map<string, unknown>();
 const session = new Map<string, unknown>();
@@ -51,7 +52,8 @@ Object.assign(process.env, {
 
 const { getOAuthConfig } = await import("../server/oauth/config.ts");
 const config = getOAuthConfig();
-assert.ok(fs.readFileSync("src/routes/index.tsx", "utf8").includes(`/${extensionId}"`));
+assert.equal(new URL(CHROME_WEB_STORE_URL).hostname, "chromewebstore.google.com");
+assert.ok(new URL(CHROME_WEB_STORE_URL).pathname.endsWith(`/${extensionId}`));
 assert.ok(
   fs
     .readFileSync(".env.example", "utf8")
