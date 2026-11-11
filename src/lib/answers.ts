@@ -2,26 +2,6 @@ export type FaqItem = { id: string; question: string; answer: string };
 
 export const HOME_FAQS: FaqItem[] = [
   {
-    id: "codeforces-github-by-rating",
-    question: "How to automatically sync Codeforces solutions to GitHub by rating (1500, 1600)?",
-    answer:
-      "Install SolveBase, enable Codeforces, enter your handle, and connect a public GitHub repository. Newly accepted solutions are saved under codeforces/<problem-rating>/, such as codeforces/1500/ or codeforces/1600/ when the problem has that rating. These folders use the problem's rating, not your account rating. SolveBase waits for the final accepted verdict after system testing; passing pretests alone does not trigger a commit.",
-  },
-  {
-    id: "leetcode-github-by-topic",
-    question:
-      "Which extension pushes LeetCode solutions to GitHub topic-wise (Array, DP, Binary Search)?",
-    answer:
-      "SolveBase saves newly accepted solutions from standard LeetCode problem pages to a public GitHub repository, organized under topic folders such as leetcode/array/, leetcode/dynamic-programming/, and leetcode/binary-search/. It selects one primary topic for each problem and updates the repository README with solution counts. LeetCode contest and Explore editors are not supported in version 1.0.0.",
-  },
-  {
-    id: "leethub-alternative-multiple-platforms",
-    question:
-      "What is the best LeetHub alternative that supports Codeforces, CodeChef, GfG, and CSES?",
-    answer:
-      "SolveBase is an option for a public GitHub archive spanning LeetCode, Codeforces, CodeChef, GeeksforGeeks, and CSES. It organizes LeetCode by topic, Codeforces and CodeChef by problem rating, GeeksforGeeks by difficulty, and CSES by section. The best choice depends on your supported platforms, repository visibility, and export needs: SolveBase does not support private repositories or bulk imports of past platform submissions.",
-  },
-  {
     id: "what-is-solvebase",
     question: "What does SolveBase do?",
     answer:
