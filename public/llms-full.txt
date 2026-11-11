@@ -1,0 +1,231 @@
+# SolveBase
+
+> SolveBase is a free Chrome extension that automatically saves newly accepted Codeforces, LeetCode, CSES, CodeChef, and GeeksforGeeks solutions to a public GitHub repository.
+
+Product documentation for SolveBase 1.0.0, maintained by Tushal Lohar.
+
+## Official sources
+- Website: https://solvebase.dev/
+- Installation: https://chromewebstore.google.com/detail/solvebase-solves-to-githu/caeobmhokccipmdinfcajpagikggollm
+- Setup guide: https://solvebase.dev/getting-started
+- Questions and answers: https://solvebase.dev/faq
+- Privacy policy: https://solvebase.dev/privacy
+- Source code and technical documentation: https://github.com/TushalLohar/SolveBase
+- Support: https://github.com/TushalLohar/SolveBase/issues
+
+## Supported platforms
+- Codeforces: Contest and practice submissions. GitHub folders organized by problem rating.
+- LeetCode: Standard leetcode.com/problems/ pages; excludes contest and Explore editors. GitHub folders organized by problem topic.
+- CSES: Problem set tasks and results. GitHub folders organized by problem set section.
+- CodeChef: Problem and submission pages. GitHub folders organized by problem rating.
+- GeeksforGeeks: Practice problems. GitHub folders organized by problem difficulty.
+
+## Getting started
+
+Source: https://solvebase.dev/getting-started
+
+1. Install and open SolveBase: Install SolveBase from the Chrome Web Store, then open its popup from your browser's extensions menu. Use Chrome 112 or later, or a compatible Chromium-based browser.
+
+2. Choose your repository and platforms: Enter a repository name, enable the platforms you use, and fill in the requested usernames. Confirm that the repository and committed solutions will be public.
+
+3. Connect GitHub: Select Connect GitHub and authorize SolveBase. It creates a public repository if the name is available, or connects a compatible existing public solutions repository. No personal access token or separate SolveBase account is required.
+
+4. Submit a solution and check GitHub: Stay signed in to your coding platform and submit a solution on a supported page while the extension is active. After the final accepted verdict, check your repository for the solution file and updated README summary. Codeforces pretests must finish system testing first.
+
+## About SolveBase
+
+### What does SolveBase do?
+
+SolveBase is a free Chrome extension that detects newly accepted coding submissions and saves the source code to a public GitHub repository using platform-specific folders. It also updates the repository README with solution counts.
+
+Source: https://solvebase.dev/faq#what-is-solvebase
+
+### Which coding platforms does SolveBase support?
+
+SolveBase supports Codeforces, standard LeetCode problem pages, CSES, CodeChef, and GeeksforGeeks. LeetCode contest and Explore editors are not supported in version 1.0.0.
+
+Source: https://solvebase.dev/faq#supported-platforms
+
+### Can I save Codeforces solutions to GitHub automatically?
+
+Yes. SolveBase watches Codeforces verdicts, waits for the final accepted result, and commits the solution to a GitHub rating folder.
+
+Source: https://solvebase.dev/faq#codeforces-sync
+
+### Can I save LeetCode solutions to GitHub automatically?
+
+Yes. On standard LeetCode problem pages, SolveBase detects an accepted submission and saves the solution under an organized LeetCode topic folder in GitHub.
+
+Source: https://solvebase.dev/faq#leetcode-sync
+
+### Does SolveBase support CodeChef, CSES, and GeeksforGeeks?
+
+Yes. SolveBase supports accepted submissions from CodeChef, CSES, and GeeksforGeeks practice pages alongside Codeforces and standard LeetCode problems.
+
+Source: https://solvebase.dev/faq#other-platforms
+
+### Does SolveBase upload source code to its own server?
+
+No. The extension sends repository updates directly to GitHub. The SolveBase OAuth service handles only the short-lived GitHub authorization exchange.
+
+Source: https://solvebase.dev/faq#source-code-privacy
+
+### Can SolveBase use an existing GitHub repository?
+
+Yes. SolveBase can connect a compatible existing public solutions repository, index recognized solution files, and preserve content outside its managed README summary block. Private repositories and unrelated non-empty repositories are not supported.
+
+Source: https://solvebase.dev/faq#existing-repository
+
+### Does SolveBase import every old solved problem automatically?
+
+No. SolveBase focuses on live accepted submissions. Existing compatible files are indexed when you connect a repository, but old platform submissions are not scraped in bulk.
+
+Source: https://solvebase.dev/faq#submission-history
+
+### How do I save coding solutions to GitHub automatically?
+
+Install SolveBase from the Chrome Web Store, choose a public repository name and your coding platforms, then connect GitHub. Stay signed in to a supported coding platform and submit a solution with the extension active. SolveBase saves newly accepted solutions directly to GitHub.
+
+Source: https://solvebase.dev/faq#automatic-github-sync
+
+### Is SolveBase free and which browsers support it?
+
+SolveBase is free to install and works in Chromium-based browsers such as Chrome, Edge, Brave, and Arc. The extension uses Manifest V3 and does not require a SolveBase account.
+
+Source: https://solvebase.dev/faq#pricing-and-browsers
+
+### Does SolveBase work for interview preparation?
+
+Yes. It creates a searchable GitHub archive of accepted practice problems, making it easier to review patterns, show consistent practice, and keep a public coding portfolio up to date.
+
+Source: https://solvebase.dev/faq#interview-preparation
+
+## LeetCode
+
+### Can SolveBase save LeetCode solutions to GitHub?
+
+Yes. SolveBase watches standard leetcode.com/problems/ pages and sends newly accepted solutions directly to the public GitHub repository you select while the extension is active.
+
+Source: https://solvebase.dev/faq#leetcode-supported-pages
+
+### How are LeetCode files organized?
+
+Solutions are grouped under a leetcode folder and organized by topic, with problem names and README counts kept consistent as new solutions arrive.
+
+Source: https://solvebase.dev/faq#leetcode-folders
+
+### Does SolveBase support LeetCode contests?
+
+Version 1.0.0 supports standard LeetCode problem pages. LeetCode contest and Explore editors are not currently supported.
+
+Source: https://solvebase.dev/faq#leetcode-contests
+
+### Can I bulk-export my previous LeetCode submissions with SolveBase?
+
+No. SolveBase captures newly accepted submissions while the extension is active. It can index recognized solution files already in a compatible public GitHub repository, but it does not download your previous LeetCode submission history.
+
+Source: https://solvebase.dev/faq#leetcode-history
+
+## Codeforces
+
+### Does SolveBase save Codeforces solutions after pretests pass?
+
+No. Passing pretests is not a final accepted verdict. SolveBase waits for system testing and commits the solution only after the final accepted result. It can track pending Codeforces verdicts for up to seven days, including after leaving the tab or restarting Chrome.
+
+Source: https://solvebase.dev/faq#codeforces-pretests
+
+### How are Codeforces solutions organized in GitHub?
+
+SolveBase groups solutions under the codeforces folder by problem rating. Solution filenames identify the problem, and the repository README summary updates as accepted solutions are saved.
+
+Source: https://solvebase.dev/faq#codeforces-folders
+
+### Can SolveBase connect my existing Codeforces solutions repository?
+
+Yes, if it is a compatible public solutions repository. SolveBase recognizes platform folders and conventional solution filenames, including older Codeforces layouts with rating folders at the repository root. Existing recognized files keep their folder and filename stem.
+
+Source: https://solvebase.dev/faq#existing-codeforces-repository
+
+### Can SolveBase import all of my past Codeforces submissions?
+
+No. SolveBase detects new submissions while the extension is active. Connecting an existing repository indexes recognized files already in GitHub; it does not bulk-download your Codeforces submission history.
+
+Source: https://solvebase.dev/faq#codeforces-history
+
+## CSES, CodeChef, and GeeksforGeeks
+
+### How do I save CSES solutions to GitHub automatically?
+
+Install SolveBase, enable CSES, choose a public GitHub repository, and connect GitHub. Stay signed in to CSES and submit on its problem set task pages with the extension active. SolveBase saves newly accepted solutions under the cses folder, grouped by problem set section, and updates the repository README summary.
+
+Source: https://solvebase.dev/faq#cses-sync
+
+### How do I save CodeChef solutions to GitHub automatically?
+
+Install SolveBase, enable CodeChef, enter the requested username, and connect a public GitHub repository. Submit on a supported CodeChef problem or submission page while signed in and with the extension active. SolveBase saves newly accepted solutions under the codechef folder by problem rating; problems without an available rating use an Unrated folder.
+
+Source: https://solvebase.dev/faq#codechef-sync
+
+### How do I save GeeksforGeeks solutions to GitHub automatically?
+
+Install SolveBase, enable GeeksforGeeks, enter the requested username, and connect a public GitHub repository. Submit a practice problem while signed in and with the extension active. SolveBase saves newly accepted solutions under the geeksforgeeks folder, grouped by problem difficulty, and updates the repository README summary.
+
+Source: https://solvebase.dev/faq#geeksforgeeks-sync
+
+## Setup and troubleshooting
+
+### Why does SolveBase ask me to confirm that my solutions will be public?
+
+SolveBase supports public GitHub repositories only. Anyone can read solutions committed to a public repository. The setup confirmation makes this visibility explicit before GitHub is connected; private repositories are not supported.
+
+Source: https://solvebase.dev/faq#public-solutions
+
+### What GitHub permissions does SolveBase request?
+
+SolveBase uses GitHub OAuth with the public_repo scope to create and update public repositories. This permission applies to public repositories on your account, although SolveBase uses the repository you select. You do not need to create or paste a personal access token. You can revoke access in GitHub Settings under Applications.
+
+Source: https://solvebase.dev/faq#github-permissions
+
+### Why has my accepted solution not appeared in GitHub?
+
+Check that SolveBase is enabled, the platform is selected, your requested username is correct, and you are signed in to the coding platform. Confirm that you submitted on a supported page and that GitHub is connected in the extension popup. Codeforces pretests are not a final accepted verdict. Accepted solutions that fail to reach GitHub can be retried locally for up to 24 hours; reconnect GitHub if the extension requests it.
+
+Source: https://solvebase.dev/faq#missing-solution
+
+### What happens if I reconnect GitHub or change repositories?
+
+Reconnecting the same GitHub account and repository preserves pending submissions. Changing the GitHub account or repository clears the old work queue. Files already committed to GitHub remain in the original repository.
+
+Source: https://solvebase.dev/faq#reconnect-github
+
+### What happens when I solve the same problem again?
+
+SolveBase updates the existing solution file instead of counting the problem twice. Recognized files from an existing solutions repository keep their folder and filename stem; if the solution language changes, the file extension changes to match.
+
+Source: https://solvebase.dev/faq#repeat-solutions
+
+### Will SolveBase overwrite my existing README?
+
+SolveBase updates its marked summary block and preserves README content outside that block. When you connect a compatible public solutions repository, it rebuilds its local index from recognized platform folders and solution filenames. Unrecognized scratch files are ignored, and unrelated non-empty repositories are rejected.
+
+Source: https://solvebase.dev/faq#readme-preservation
+
+## GitHub access and public solutions
+
+### Do I need to give SolveBase my GitHub password or a personal access token?
+
+No. SolveBase connects through GitHub OAuth: select Connect GitHub in the extension and authorize it on GitHub. You do not enter your GitHub password into SolveBase or create and paste a personal access token. The authorization token is stored in trusted Chrome extension storage on your device.
+
+Source: https://solvebase.dev/faq#github-password-and-token
+
+### Does SolveBase support private GitHub repositories?
+
+No. SolveBase 1.0.0 supports public GitHub repositories only and requests GitHub's public_repo OAuth scope. You must confirm that your repository and saved solutions will be publicly visible before connecting GitHub.
+
+Source: https://solvebase.dev/faq#private-repositories
+
+### How do I disconnect SolveBase and revoke its GitHub access?
+
+Disconnect GitHub in SolveBase to remove the authorization token from the extension. To revoke the OAuth grant, open GitHub Settings, choose Applications, and revoke SolveBase under Authorized OAuth Apps. Resetting or uninstalling SolveBase removes its local settings and connection data. Solutions already committed to GitHub remain in your repository until you delete them there.
+
+Source: https://solvebase.dev/faq#disconnect-and-revoke
