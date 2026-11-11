@@ -5,6 +5,7 @@
     "api/**/*.ts",
     "server/**/*.ts",
     "tests/**/*.ts",
+    "scripts/**/*.ts",
     "vite.config.ts",
     "eslint.config.js"
   ],
