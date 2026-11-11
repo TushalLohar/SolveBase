@@ -119,21 +119,4 @@ npm audit
 The scoped `minimatch` override supplies the patched matcher used by TypeScript ESLint until its
 upstream dependency range includes version 11.0.1 or newer.
 
-### Website answers and crawler references
 
-The homepage, platform guides, and `/faq` share their question-and-answer content from
-`src/lib/answers.ts`. Keep product facts in `src/lib/product.ts` aligned with the released extension.
-FAQ structured data uses the same answers and permanent fragment links as the rendered pages.
-
-`/how-it-works` explains the supported workflows and data flow, compares automatic sync with manual
-saving, and cites a checked source revision. Its facts and citations live in
-`src/lib/product-evidence.ts`. Update the checked date and source revision after reviewing a new
-extension release; keep these dates tied to an actual review.
-
-`npm run build` prerenders the public pages and regenerates `public/llms-full.txt` from those shared
-facts, setup steps, answers, and product guide. It also generates `public/how-it-works.md` from the same
-guide content shown on the website. Run `npm run docs:generate` to refresh both text references without
-building. Keep `public/llms.txt` and `public/sitemap.xml` up to date when adding documentation routes.
-
-For bugs or feature requests, [open an issue](https://github.com/TushalLohar/SolveBase/issues). Include
-the platform, extension version, expected behavior, and any error message; omit tokens and secrets.
