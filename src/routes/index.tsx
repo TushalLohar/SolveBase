@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { HOME_FAQS } from "../lib/answers";
+import { ExtensionComparison } from "../components/ExtensionComparison";
 import { useState } from "react";
 import { seoHead } from "../lib/seo";
 import { CHROME_WEB_STORE_URL, PRODUCT_DESCRIPTION } from "../lib/product";
@@ -259,8 +260,7 @@ function Home() {
             <span className="ink-highlight">Keep it.</span>
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
-            {PRODUCT_DESCRIPTION} Solutions are organized by platform, and your README updates
-            automatically.
+            {PRODUCT_DESCRIPTION}
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <a href={CHROME_WEB_STORE_URL} target="_blank" rel="noreferrer" className="cta-primary">
@@ -565,6 +565,24 @@ function Home() {
         </p>
       </section>
 
+      <section id="compare" className="site-reveal py-20" aria-labelledby="compare-title">
+        <p className="section-kicker">Choose your workflow</p>
+        <h2 id="compare-title" className="mt-3 text-3xl font-black sm:text-5xl">
+          SolveBase, LeetHub, CP Sync, and CodeHub.
+        </h2>
+        <p className="mt-5 max-w-3xl leading-7 text-muted-foreground">
+          Compare supported platforms, topic and rating folders, final-verdict handling, and GitHub
+          permissions using the documented projects below.
+        </p>
+        <ExtensionComparison />
+        <a
+          href="/compare"
+          className="mt-6 inline-block text-sm font-semibold underline underline-offset-4"
+        >
+          Full extension comparison and directory examples
+        </a>
+      </section>
+
       <section className="site-reveal feature-band">
         <div>
           <div className="section-kicker">Designed for focus</div>
@@ -629,11 +647,17 @@ function Home() {
           {HOME_FAQS.map((item) => (
             <details key={item.id} id={item.id} className="scroll-mt-24">
               <summary>
-                <span className="faq-question">
-                  <span className="faq-mark">?</span>
-                  {item.question}
-                </span>
-                <span className="faq-toggle">+</span>
+                <h3 className="flex w-full items-center justify-between gap-5">
+                  <span className="faq-question">
+                    <span className="faq-mark" aria-hidden="true">
+                      ?
+                    </span>
+                    {item.question}
+                  </span>
+                  <span className="faq-toggle" aria-hidden="true">
+                    +
+                  </span>
+                </h3>
               </summary>
               <div className="faq-answer">
                 <p id={`${item.id}-answer`}>{item.answer}</p>
@@ -668,6 +692,9 @@ function Home() {
           </a>
           <a href="/how-it-works" className="underline underline-offset-4">
             How sync works, with sources and workflow comparisons
+          </a>
+          <a href="/compare" className="underline underline-offset-4">
+            SolveBase, LeetHub, CP Sync, and CodeHub comparison
           </a>
         </div>
       </nav>
