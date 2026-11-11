@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CodeforcesToGithubRouteImport } from './routes/codeforces-to-github'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as GettingStartedRouteImport } from './routes/getting-started'
 import { Route as LeetcodeToGithubRouteImport } from './routes/leetcode-to-github'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 
@@ -22,6 +24,16 @@ const IndexRoute = IndexRouteImport.update({
 const CodeforcesToGithubRoute = CodeforcesToGithubRouteImport.update({
   id: '/codeforces-to-github',
   path: '/codeforces-to-github',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GettingStartedRoute = GettingStartedRouteImport.update({
+  id: '/getting-started',
+  path: '/getting-started',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LeetcodeToGithubRoute = LeetcodeToGithubRouteImport.update({
@@ -38,12 +50,16 @@ const PrivacyRoute = PrivacyRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/codeforces-to-github': typeof CodeforcesToGithubRoute
+  '/faq': typeof FaqRoute
+  '/getting-started': typeof GettingStartedRoute
   '/leetcode-to-github': typeof LeetcodeToGithubRoute
   '/privacy': typeof PrivacyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/codeforces-to-github': typeof CodeforcesToGithubRoute
+  '/faq': typeof FaqRoute
+  '/getting-started': typeof GettingStartedRoute
   '/leetcode-to-github': typeof LeetcodeToGithubRoute
   '/privacy': typeof PrivacyRoute
 }
@@ -51,18 +67,34 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/codeforces-to-github': typeof CodeforcesToGithubRoute
+  '/faq': typeof FaqRoute
+  '/getting-started': typeof GettingStartedRoute
   '/leetcode-to-github': typeof LeetcodeToGithubRoute
   '/privacy': typeof PrivacyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/codeforces-to-github' | '/leetcode-to-github' | '/privacy'
+  fullPaths:
+    | '/'
+    | '/codeforces-to-github'
+    | '/faq'
+    | '/getting-started'
+    | '/leetcode-to-github'
+    | '/privacy'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/codeforces-to-github' | '/leetcode-to-github' | '/privacy'
+  to:
+    | '/'
+    | '/codeforces-to-github'
+    | '/faq'
+    | '/getting-started'
+    | '/leetcode-to-github'
+    | '/privacy'
   id:
     | '__root__'
     | '/'
     | '/codeforces-to-github'
+    | '/faq'
+    | '/getting-started'
     | '/leetcode-to-github'
     | '/privacy'
   fileRoutesById: FileRoutesById
@@ -70,6 +102,8 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CodeforcesToGithubRoute: typeof CodeforcesToGithubRoute
+  FaqRoute: typeof FaqRoute
+  GettingStartedRoute: typeof GettingStartedRoute
   LeetcodeToGithubRoute: typeof LeetcodeToGithubRoute
   PrivacyRoute: typeof PrivacyRoute
 }
@@ -88,6 +122,20 @@ declare module '@tanstack/react-router' {
       path: '/codeforces-to-github'
       fullPath: '/codeforces-to-github'
       preLoaderRoute: typeof CodeforcesToGithubRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/getting-started': {
+      id: '/getting-started'
+      path: '/getting-started'
+      fullPath: '/getting-started'
+      preLoaderRoute: typeof GettingStartedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/leetcode-to-github': {
@@ -110,6 +158,8 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CodeforcesToGithubRoute: CodeforcesToGithubRoute,
+  FaqRoute: FaqRoute,
+  GettingStartedRoute: GettingStartedRoute,
   LeetcodeToGithubRoute: LeetcodeToGithubRoute,
   PrivacyRoute: PrivacyRoute,
 }
