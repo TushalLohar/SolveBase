@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "name": "SolveBase - Solves to GitHub",
+  "name": "SolveBase — Auto-Sync LeetCode, Codeforces, CodeChef, GfG & CSES to GitHub",
   "version": "1.0.0",
   "minimum_chrome_version": "112",
   "homepage_url": "https://solvebase.dev/",
-  "description": "Automatically syncs accepted Codeforces, LeetCode, CSES, CodeChef and GeeksforGeeks solutions to GitHub.",
+  "description": "Automatically save accepted LeetCode, Codeforces, CodeChef, GeeksforGeeks and CSES solutions to an organized GitHub repository.",
   "permissions": ["storage", "cookies", "scripting", "identity", "alarms", "notifications"],
   "host_permissions": [
     "https://codeforces.com/*",
