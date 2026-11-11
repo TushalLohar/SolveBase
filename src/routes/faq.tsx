@@ -137,9 +137,6 @@ function FaqPage() {
         <a href="/codeforces-to-github" className="underline underline-offset-4">
           Codeforces to GitHub
         </a>
-        <a href="/compare" className="underline underline-offset-4">
-          Compare GitHub sync extensions
-        </a>
         <a href="/" className="underline underline-offset-4">
           Back to SolveBase
         </a>
