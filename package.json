@@ -59,11 +59,5 @@
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.56.1",
     "vite": "^8.1.5"
-  },
-  "description": "SolveBase automatically saves accepted LeetCode, Codeforces, CodeChef, GeeksforGeeks and CSES solutions to an organized public GitHub repository.",
-  "homepage": "https://solvebase.dev/",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/TushalLohar/SolveBase.git"
   }
 }
