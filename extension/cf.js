@@ -15,6 +15,7 @@
 import * as store from "./storage.js";
 
 import { createPacer } from "./pace.js";
+import { sanitizeName, transientError, authError } from "./adapter-utils.js";
 
 const pacer = createPacer({ min: 300, max: 20000 });
 const { paced, noteOutcome, throttleBackoffMs } = pacer;
@@ -50,32 +51,11 @@ function extFor(language) {
   return hit ? hit[1] : "txt";
 }
 
-// GitHub paths and most filesystems choke on these; the contestId+index
-// prefix keeps names unique even when sanitization collapses them.
-function sanitizeName(name) {
-  return (
-    (name || "Problem")
-      .replace(/[\\/:*?"<>|]/g, "-")
-      .replace(/[\u0000-\u001f]/g, "")
-      .replace(/\s+/g, " ")
-      .replace(/\.+$/, "")
-      .trim()
-      .slice(0, 80) || "Problem"
-  );
-}
-
 function problemKey(sub) {
   const p = sub.problem || {};
   const contest = p.contestId ?? sub.contestId ?? "0";
   const index = p.index ?? sub.problemIndex ?? sub.index ?? "";
   return `${contest}${index}`;
-}
-
-function transientError(message, retryAfterMs) {
-  const err = new Error(message);
-  err.code = "transient";
-  if (retryAfterMs) err.retryAfter = retryAfterMs;
-  return err;
 }
 
 async function apiGet(path) {
@@ -229,12 +209,6 @@ class SourceError extends Error {
     super(reason);
     this.code = code; // "transient" | "unavailable" | "parse"
   }
-}
-
-function authError(message) {
-  const err = new Error(message);
-  err.code = "auth";
-  return err;
 }
 
 const INTERSTITIAL =
