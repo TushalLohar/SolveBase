@@ -1,26 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { breadcrumbSchema, faqSchema, seoHead } from "../lib/seo";
-
-const CHROME_URL =
-  "https://chromewebstore.google.com/detail/solvebase-solves-to-githu/caeobmhokccipmdinfcajpagikggollm";
-
-const FAQS = [
-  {
-    question: "Can SolveBase save LeetCode solutions to GitHub?",
-    answer:
-      "Yes. SolveBase watches standard LeetCode problem pages and sends an accepted solution directly to the GitHub repository you select.",
-  },
-  {
-    question: "How are LeetCode files organized?",
-    answer:
-      "Solutions are grouped under a leetcode folder and organized by topic, with problem names and README counts kept consistent as new solutions arrive.",
-  },
-  {
-    question: "Does SolveBase support LeetCode contests?",
-    answer:
-      "Version 1.0 supports standard LeetCode problem pages. LeetCode contest and Explore editors are not currently supported.",
-  },
-];
+import { LEETCODE_FAQS } from "../lib/answers";
+import { breadcrumbSchema, seoHead } from "../lib/seo";
+import { CHROME_WEB_STORE_URL } from "../lib/product";
 
 export const Route = createFileRoute("/leetcode-to-github")({
   head: () =>
@@ -29,7 +10,8 @@ export const Route = createFileRoute("/leetcode-to-github")({
       title: "Save LeetCode Solutions to GitHub Automatically | SolveBase",
       description:
         "Automatically save accepted LeetCode solutions to GitHub. SolveBase organizes your practice code by topic and keeps your README updated.",
-      schemas: [breadcrumbSchema("LeetCode to GitHub", "/leetcode-to-github"), faqSchema(FAQS)],
+      schemas: [breadcrumbSchema("LeetCode to GitHub", "/leetcode-to-github")],
+      faqs: LEETCODE_FAQS,
     }),
   component: LeetCodeGuide,
 });
@@ -52,11 +34,12 @@ function LeetCodeGuide() {
           Save accepted LeetCode solutions to GitHub automatically.
         </h1>
         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-          SolveBase turns your accepted LeetCode practice into a clean, searchable GitHub archive.
-          Connect once, keep solving, and let the extension commit each solution without copy-paste.
+          SolveBase is a free Chrome extension that saves newly accepted LeetCode solutions to a
+          public GitHub repository. It supports standard problem pages, organizes solutions by
+          topic, and updates your README. LeetCode contest and Explore editors are not supported.
         </p>
         <a
-          href={CHROME_URL}
+          href={CHROME_WEB_STORE_URL}
           target="_blank"
           rel="noreferrer"
           className="cta-primary mt-8 inline-flex"
@@ -65,7 +48,11 @@ function LeetCodeGuide() {
         </a>
         <div className="mt-16 grid gap-8 sm:grid-cols-3">
           {[
-            ["1", "Connect GitHub", "Choose the repository where your practice belongs."],
+            [
+              "1",
+              "Connect GitHub",
+              "Enable LeetCode, choose a public repository, and authorize GitHub.",
+            ],
             ["2", "Solve normally", "Use standard LeetCode problem pages as usual."],
             ["3", "Review your archive", "Find solutions by topic with a living README summary."],
           ].map(([number, title, body]) => (
@@ -76,6 +63,13 @@ function LeetCodeGuide() {
             </section>
           ))}
         </div>
+        <p className="mt-6 text-sm leading-7 text-muted-foreground">
+          Follow the{" "}
+          <a href="/getting-started" className="font-semibold underline underline-offset-4">
+            SolveBase setup guide
+          </a>{" "}
+          for installation steps, GitHub permissions, and help with missing submissions.
+        </p>
         <section className="mt-20 border-y border-border py-10">
           <h2 className="text-3xl font-black">Why keep LeetCode solutions in GitHub?</h2>
           <p className="mt-4 leading-7 text-muted-foreground">
@@ -87,10 +81,19 @@ function LeetCodeGuide() {
         <section className="mt-16">
           <h2 className="text-3xl font-black">LeetCode to GitHub FAQ</h2>
           <div className="mt-8 space-y-6">
-            {FAQS.map((item) => (
-              <details key={item.question} className="border-b border-border pb-5">
+            {LEETCODE_FAQS.map((item) => (
+              <details
+                key={item.id}
+                id={item.id}
+                className="scroll-mt-8 border-b border-border pb-5"
+              >
                 <summary className="cursor-pointer font-bold">{item.question}</summary>
-                <p className="mt-3 max-w-2xl leading-7 text-muted-foreground">{item.answer}</p>
+                <p
+                  id={`${item.id}-answer`}
+                  className="mt-3 max-w-2xl leading-7 text-muted-foreground"
+                >
+                  {item.answer}
+                </p>
               </details>
             ))}
           </div>
@@ -101,6 +104,13 @@ function LeetCodeGuide() {
             save Codeforces solutions to GitHub
           </a>{" "}
           with rating folders and final-verdict checks.
+        </p>
+        <p className="mt-4 text-sm leading-7 text-muted-foreground">
+          See the{" "}
+          <a href="/faq" className="font-semibold underline underline-offset-4">
+            full SolveBase FAQ
+          </a>{" "}
+          for public repository requirements, privacy, and other supported platforms.
         </p>
       </article>
     </main>
