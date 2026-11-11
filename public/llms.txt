@@ -11,8 +11,6 @@ SolveBase uses GitHub OAuth with the public_repo scope. It does not require a pe
 - [How SolveBase works](https://solvebase.dev/how-it-works): Versioned product facts with direct implementation citations, sync limits, data flow, and a comparison with manual GitHub saving.
 - [How SolveBase works (Markdown)](https://solvebase.dev/how-it-works.md): The same guide as plain Markdown, including source references.
 - [Frequently asked questions](https://solvebase.dev/faq): Direct answers about pricing, platform workflows, repository visibility, GitHub access, and troubleshooting. Each question has a permanent fragment link.
-- [GitHub sync extension comparison](https://solvebase.dev/compare): SolveBase, original LeetHub, a specified CP Sync variant, and independent CodeHub compared using linked source snapshots.
-- [Extension comparison (Markdown)](https://solvebase.dev/compare.md): The same specification table, comparison notes, and directory examples as plain Markdown.
 - [LeetCode to GitHub](https://solvebase.dev/leetcode-to-github): Save accepted solutions from standard LeetCode problem pages, organized by topic.
 - [Codeforces to GitHub](https://solvebase.dev/codeforces-to-github): Save accepted contest and practice solutions by rating after the final verdict.
 - [Privacy policy](https://solvebase.dev/privacy): Data handling, browser permissions, local retention, and revoking access.
