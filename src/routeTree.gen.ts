@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as CodeforcesToGithubRouteImport } from './routes/codeforces-to-github'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as GettingStartedRouteImport } from './routes/getting-started'
+import { Route as HowItWorksRouteImport } from './routes/how-it-works'
 import { Route as LeetcodeToGithubRouteImport } from './routes/leetcode-to-github'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 
@@ -36,6 +37,11 @@ const GettingStartedRoute = GettingStartedRouteImport.update({
   path: '/getting-started',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HowItWorksRoute = HowItWorksRouteImport.update({
+  id: '/how-it-works',
+  path: '/how-it-works',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LeetcodeToGithubRoute = LeetcodeToGithubRouteImport.update({
   id: '/leetcode-to-github',
   path: '/leetcode-to-github',
@@ -52,6 +58,7 @@ export interface FileRoutesByFullPath {
   '/codeforces-to-github': typeof CodeforcesToGithubRoute
   '/faq': typeof FaqRoute
   '/getting-started': typeof GettingStartedRoute
+  '/how-it-works': typeof HowItWorksRoute
   '/leetcode-to-github': typeof LeetcodeToGithubRoute
   '/privacy': typeof PrivacyRoute
 }
@@ -60,6 +67,7 @@ export interface FileRoutesByTo {
   '/codeforces-to-github': typeof CodeforcesToGithubRoute
   '/faq': typeof FaqRoute
   '/getting-started': typeof GettingStartedRoute
+  '/how-it-works': typeof HowItWorksRoute
   '/leetcode-to-github': typeof LeetcodeToGithubRoute
   '/privacy': typeof PrivacyRoute
 }
@@ -69,6 +77,7 @@ export interface FileRoutesById {
   '/codeforces-to-github': typeof CodeforcesToGithubRoute
   '/faq': typeof FaqRoute
   '/getting-started': typeof GettingStartedRoute
+  '/how-it-works': typeof HowItWorksRoute
   '/leetcode-to-github': typeof LeetcodeToGithubRoute
   '/privacy': typeof PrivacyRoute
 }
@@ -79,6 +88,7 @@ export interface FileRouteTypes {
     | '/codeforces-to-github'
     | '/faq'
     | '/getting-started'
+    | '/how-it-works'
     | '/leetcode-to-github'
     | '/privacy'
   fileRoutesByTo: FileRoutesByTo
@@ -87,6 +97,7 @@ export interface FileRouteTypes {
     | '/codeforces-to-github'
     | '/faq'
     | '/getting-started'
+    | '/how-it-works'
     | '/leetcode-to-github'
     | '/privacy'
   id:
@@ -95,6 +106,7 @@ export interface FileRouteTypes {
     | '/codeforces-to-github'
     | '/faq'
     | '/getting-started'
+    | '/how-it-works'
     | '/leetcode-to-github'
     | '/privacy'
   fileRoutesById: FileRoutesById
@@ -104,6 +116,7 @@ export interface RootRouteChildren {
   CodeforcesToGithubRoute: typeof CodeforcesToGithubRoute
   FaqRoute: typeof FaqRoute
   GettingStartedRoute: typeof GettingStartedRoute
+  HowItWorksRoute: typeof HowItWorksRoute
   LeetcodeToGithubRoute: typeof LeetcodeToGithubRoute
   PrivacyRoute: typeof PrivacyRoute
 }
@@ -138,6 +151,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GettingStartedRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/how-it-works': {
+      id: '/how-it-works'
+      path: '/how-it-works'
+      fullPath: '/how-it-works'
+      preLoaderRoute: typeof HowItWorksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/leetcode-to-github': {
       id: '/leetcode-to-github'
       path: '/leetcode-to-github'
@@ -160,6 +180,7 @@ const rootRouteChildren: RootRouteChildren = {
   CodeforcesToGithubRoute: CodeforcesToGithubRoute,
   FaqRoute: FaqRoute,
   GettingStartedRoute: GettingStartedRoute,
+  HowItWorksRoute: HowItWorksRoute,
   LeetcodeToGithubRoute: LeetcodeToGithubRoute,
   PrivacyRoute: PrivacyRoute,
 }
