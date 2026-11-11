@@ -35,6 +35,7 @@ const generated = buildReadme(synced, "tourist");
 assert.match(generated, /\*\*Total solved: 6\*\*/);
 assert.match(generated, /\| \[1400\]\(\.\/codeforces\/1400\) \| 2 \|/);
 assert.match(generated, /<!-- \/cf-sync -->/);
+assert.match(generated, /\[Auto-synced by SolveBase\]\(https:\/\/solvebase\.dev\/\)/);
 
 const preserved = mergeReadme("# My existing solutions\n\nPersonal notes.\n", generated);
 assert.match(preserved, /^# My existing solutions/);
@@ -43,6 +44,7 @@ assert.match(preserved, /\*\*Total solved: 6\*\*/);
 
 const updated = mergeReadme(preserved, buildReadme({}, "tourist"));
 assert.equal((updated.match(/<!-- cf-sync -->/g) || []).length, 1);
+assert.equal((updated.match(/\[Auto-synced by SolveBase\]/g) || []).length, 1);
 assert.match(updated, /\*\*Total solved: 0\*\*/);
 assert.doesNotMatch(updated, /\*\*Total solved: 6\*\*/);
 
