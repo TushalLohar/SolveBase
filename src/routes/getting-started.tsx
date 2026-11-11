@@ -167,6 +167,9 @@ function GettingStarted() {
         <a href="/faq" className="underline underline-offset-4">
           All questions and answers
         </a>
+        <a href="/how-it-works" className="underline underline-offset-4">
+          How sync works, with sources
+        </a>
         <a href="/" className="underline underline-offset-4">
           Back to SolveBase
         </a>
