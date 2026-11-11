@@ -1,5 +1,6 @@
 import { FAQ_GROUPS, SETUP_STEPS } from "./answers.ts";
 import { GUIDE_PATH, renderProductGuide } from "./product-evidence.ts";
+import { renderComparisonGuide } from "./comparison.ts";
 import {
   CHROME_WEB_STORE_URL,
   GITHUB_URL,
@@ -22,6 +23,7 @@ export function renderAnswerReference() {
       `- Setup guide: ${SITE_URL}/getting-started`,
       `- How SolveBase works, with supporting sources: ${SITE_URL}${GUIDE_PATH}`,
       `- Questions and answers: ${SITE_URL}/faq`,
+      `- Extension comparison: ${SITE_URL}/compare`,
       `- Privacy policy: ${SITE_URL}/privacy`,
       `- Source code and technical documentation: ${GITHUB_URL}`,
       `- Support: ${GITHUB_URL}/issues`,
@@ -48,6 +50,7 @@ export function renderAnswerReference() {
       ].join("\n\n"),
     ),
     renderProductGuide().replace(/^(#{1,3}) /gm, "$1# "),
+    renderComparisonGuide().replace(/^(#{1,3}) /gm, "$1# "),
   ];
 
   return `${sections.join("\n\n")}\n`;
