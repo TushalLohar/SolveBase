@@ -1,0 +1,30 @@
+# SolveBase
+
+> SolveBase is a free Chrome extension that automatically saves newly accepted Codeforces, LeetCode, CSES, CodeChef, and GeeksforGeeks solutions to a public GitHub repository. It organizes solution files by platform and updates the repository README summary.
+
+SolveBase uses GitHub OAuth with the public_repo scope. It does not require a personal access token or a separate SolveBase account. Solution source code travels directly from the extension to GitHub; the SolveBase backend handles the GitHub authorization exchange.
+
+## Product documentation
+
+- [SolveBase](https://solvebase.dev/): Product overview and frequently asked questions.
+- [Getting started](https://solvebase.dev/getting-started): Installation, supported pages, public repository requirements, GitHub permissions, and sync troubleshooting.
+- [Frequently asked questions](https://solvebase.dev/faq): Direct answers about pricing, platform workflows, repository visibility, GitHub access, and troubleshooting. Each question has a permanent fragment link.
+- [LeetCode to GitHub](https://solvebase.dev/leetcode-to-github): Save accepted solutions from standard LeetCode problem pages, organized by topic.
+- [Codeforces to GitHub](https://solvebase.dev/codeforces-to-github): Save accepted contest and practice solutions by rating after the final verdict.
+- [Privacy policy](https://solvebase.dev/privacy): Data handling, browser permissions, local retention, and revoking access.
+- [Full text reference](https://solvebase.dev/llms-full.txt): Product facts, setup steps, supported platforms, and the full FAQ in plain text.
+
+## Current limitations
+
+- Public GitHub repositories only. Private repositories are not supported.
+- New submissions are detected while the extension is active. There is no bulk import of past platform submissions.
+- LeetCode support covers standard leetcode.com/problems/ pages; contest and Explore editors are not supported in version 1.0.0.
+- Codeforces pretests are not final acceptance. Pending final verdicts can be tracked locally for up to seven days.
+- Accepted solutions that cannot reach GitHub immediately can be retried locally for up to 24 hours.
+- Compatible existing public solutions repositories are supported. Unrelated non-empty repositories are rejected.
+
+## Official links
+
+- [Chrome Web Store](https://chromewebstore.google.com/detail/solvebase-solves-to-githu/caeobmhokccipmdinfcajpagikggollm): Official installation listing.
+- [Source code and README](https://github.com/TushalLohar/SolveBase): Implementation and technical documentation maintained by Tushal Lohar.
+- [Support](https://github.com/TushalLohar/SolveBase/issues): Bug reports and feature requests.
