@@ -556,6 +556,13 @@ function Home() {
             </div>
           ))}
         </div>
+        <p className="mt-8 text-sm leading-7 text-muted-foreground">
+          Read{" "}
+          <a href="/how-it-works" className="font-semibold underline underline-offset-4">
+            how SolveBase saves solutions to GitHub
+          </a>{" "}
+          for supported workflows, source-code handling, and the references behind these details.
+        </p>
       </section>
 
       <section className="site-reveal feature-band">
@@ -658,6 +665,9 @@ function Home() {
           </a>
           <a href="/faq" className="underline underline-offset-4">
             All SolveBase questions and answers
+          </a>
+          <a href="/how-it-works" className="underline underline-offset-4">
+            How sync works, with sources and workflow comparisons
           </a>
         </div>
       </nav>
