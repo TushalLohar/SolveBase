@@ -5,6 +5,7 @@
 
 import * as store from "./storage.js";
 import { createPacer } from "./pace.js";
+import { sanitizeName, transientError } from "./adapter-utils.js";
 
 const GFG_API = "https://practiceapi.geeksforgeeks.org/api/vr/user/problems/submissions/";
 const REQUEST_TIMEOUT = 15_000;
@@ -46,18 +47,6 @@ function extFor(language) {
   return EXT_BY_LANG[cleaned] || EXT_BY_LANG[language.toLowerCase()] || "cpp";
 }
 
-function sanitizeName(name) {
-  return (
-    (name || "Problem")
-      .replace(/[\\/:*?"<>|]/g, "-")
-      .replace(/[\u0000-\u001f]/g, "")
-      .replace(/\s+/g, " ")
-      .replace(/\.+$/, "")
-      .trim()
-      .slice(0, 80) || "Problem"
-  );
-}
-
 function normalizeDifficulty(diff) {
   const lower = String(diff || "")
     .toLowerCase()
@@ -80,13 +69,6 @@ export function submissionIdFor(slug, source) {
     hash = ((hash << 5) + hash + text.charCodeAt(i)) | 0;
   }
   return `${slug || "problem"}:${(hash >>> 0).toString(36)}`;
-}
-
-function transientError(message, retryAfterMs) {
-  const err = new Error(message);
-  err.code = "transient";
-  if (retryAfterMs) err.retryAfter = retryAfterMs;
-  return err;
 }
 
 const pacer = createPacer({ min: 250, max: 8000 });
