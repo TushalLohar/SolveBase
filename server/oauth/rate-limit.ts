@@ -75,7 +75,3 @@ export async function enforceRateLimit(
     console.warn(`[rate-limit] Redis unavailable, fallback to L1 limiter:`, error);
   }
 }
-
-export function resetInMemoryRateLimits(): void {
-  memoryBuckets.clear();
-}
