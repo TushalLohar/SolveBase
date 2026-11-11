@@ -1,8 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { CODEFORCES_FAQS } from "../lib/answers";
 import { breadcrumbSchema, seoHead } from "../lib/seo";
-
-const CHROME_URL =
-  "https://chromewebstore.google.com/detail/solvebase-solves-to-githu/caeobmhokccipmdinfcajpagikggollm";
+import { CHROME_WEB_STORE_URL } from "../lib/product";
 
 export const Route = createFileRoute("/codeforces-to-github")({
   head: () =>
@@ -12,6 +11,7 @@ export const Route = createFileRoute("/codeforces-to-github")({
       description:
         "Automatically archive accepted Codeforces solutions in GitHub, organized by rating. SolveBase detects final verdicts and updates your README.",
       schemas: [breadcrumbSchema("Codeforces to GitHub", "/codeforces-to-github")],
+      faqs: CODEFORCES_FAQS,
     }),
   component: CodeforcesGuide,
 });
@@ -34,17 +34,26 @@ function CodeforcesGuide() {
           Archive accepted Codeforces solutions by rating.
         </h1>
         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-          SolveBase detects the final accepted verdict on Codeforces and commits your solution to
-          GitHub in the right rating folder. No manual download, rename, or copy-paste required.
+          SolveBase is a free Chrome extension that saves newly accepted Codeforces solutions to a
+          public GitHub repository, organized by problem rating. It supports contest and practice
+          submissions and waits for the final verdict after system testing before committing.
         </p>
         <a
-          href={CHROME_URL}
+          href={CHROME_WEB_STORE_URL}
           target="_blank"
           rel="noreferrer"
           className="cta-primary mt-8 inline-flex"
         >
           Install SolveBase free
         </a>
+        <p className="mt-6 text-sm leading-7 text-muted-foreground">
+          To get started, enable Codeforces, enter your handle, choose a public repository, and
+          connect GitHub. Follow the{" "}
+          <a href="/getting-started" className="font-semibold underline underline-offset-4">
+            full setup guide
+          </a>{" "}
+          for installation and troubleshooting.
+        </p>
         <section className="mt-16 grid gap-4 sm:grid-cols-2">
           {[
             [
@@ -76,6 +85,26 @@ function CodeforcesGuide() {
           </p>
         </section>
         <section className="mt-16">
+          <h2 className="text-3xl font-black">Codeforces to GitHub FAQ</h2>
+          <div className="mt-8 space-y-6">
+            {CODEFORCES_FAQS.map((item) => (
+              <details
+                key={item.id}
+                id={item.id}
+                className="scroll-mt-8 border-b border-border pb-5"
+              >
+                <summary className="cursor-pointer font-bold">{item.question}</summary>
+                <p
+                  id={`${item.id}-answer`}
+                  className="mt-3 max-w-2xl leading-7 text-muted-foreground"
+                >
+                  {item.answer}
+                </p>
+              </details>
+            ))}
+          </div>
+        </section>
+        <section className="mt-16">
           <h2 className="text-3xl font-black">Supported competitive-programming workflow</h2>
           <p className="mt-4 leading-7 text-muted-foreground">
             SolveBase also supports CSES, CodeChef, GeeksforGeeks, and standard LeetCode problem
@@ -86,6 +115,13 @@ function CodeforcesGuide() {
             in the same repository, or connect an existing compatible solutions repository.
           </p>
         </section>
+        <p className="mt-8 text-sm leading-7 text-muted-foreground">
+          See the{" "}
+          <a href="/faq" className="font-semibold underline underline-offset-4">
+            full SolveBase FAQ
+          </a>{" "}
+          for GitHub permissions, public repository requirements, and troubleshooting.
+        </p>
       </article>
     </main>
   );
