@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CodeforcesToGithubRouteImport } from './routes/codeforces-to-github'
+import { Route as CompareRouteImport } from './routes/compare'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as GettingStartedRouteImport } from './routes/getting-started'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
@@ -25,6 +26,11 @@ const IndexRoute = IndexRouteImport.update({
 const CodeforcesToGithubRoute = CodeforcesToGithubRouteImport.update({
   id: '/codeforces-to-github',
   path: '/codeforces-to-github',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompareRoute = CompareRouteImport.update({
+  id: '/compare',
+  path: '/compare',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FaqRoute = FaqRouteImport.update({
@@ -56,6 +62,7 @@ const PrivacyRoute = PrivacyRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/codeforces-to-github': typeof CodeforcesToGithubRoute
+  '/compare': typeof CompareRoute
   '/faq': typeof FaqRoute
   '/getting-started': typeof GettingStartedRoute
   '/how-it-works': typeof HowItWorksRoute
@@ -65,6 +72,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/codeforces-to-github': typeof CodeforcesToGithubRoute
+  '/compare': typeof CompareRoute
   '/faq': typeof FaqRoute
   '/getting-started': typeof GettingStartedRoute
   '/how-it-works': typeof HowItWorksRoute
@@ -75,6 +83,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/codeforces-to-github': typeof CodeforcesToGithubRoute
+  '/compare': typeof CompareRoute
   '/faq': typeof FaqRoute
   '/getting-started': typeof GettingStartedRoute
   '/how-it-works': typeof HowItWorksRoute
@@ -86,6 +95,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/codeforces-to-github'
+    | '/compare'
     | '/faq'
     | '/getting-started'
     | '/how-it-works'
@@ -95,6 +105,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/codeforces-to-github'
+    | '/compare'
     | '/faq'
     | '/getting-started'
     | '/how-it-works'
@@ -104,6 +115,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/codeforces-to-github'
+    | '/compare'
     | '/faq'
     | '/getting-started'
     | '/how-it-works'
@@ -114,6 +126,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CodeforcesToGithubRoute: typeof CodeforcesToGithubRoute
+  CompareRoute: typeof CompareRoute
   FaqRoute: typeof FaqRoute
   GettingStartedRoute: typeof GettingStartedRoute
   HowItWorksRoute: typeof HowItWorksRoute
@@ -135,6 +148,13 @@ declare module '@tanstack/react-router' {
       path: '/codeforces-to-github'
       fullPath: '/codeforces-to-github'
       preLoaderRoute: typeof CodeforcesToGithubRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/compare': {
+      id: '/compare'
+      path: '/compare'
+      fullPath: '/compare'
+      preLoaderRoute: typeof CompareRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/faq': {
@@ -178,6 +198,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CodeforcesToGithubRoute: CodeforcesToGithubRoute,
+  CompareRoute: CompareRoute,
   FaqRoute: FaqRoute,
   GettingStartedRoute: GettingStartedRoute,
   HowItWorksRoute: HowItWorksRoute,
