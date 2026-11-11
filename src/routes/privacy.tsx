@@ -1,27 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
-
-const SITE_URL = "https://solvebase.dev";
+import { seoHead } from "../lib/seo";
 
 export const Route = createFileRoute("/privacy")({
-  head: () => ({
-    meta: [
-      { title: "Privacy Policy | SolveBase" },
-      {
-        name: "description",
-        content:
-          "How SolveBase handles GitHub authorization, coding-platform account data, and accepted solution source code.",
-      },
-      { name: "robots", content: "index, follow" },
-      { property: "og:title", content: "SolveBase Privacy Policy" },
-      {
-        property: "og:description",
-        content: "A clear explanation of the data SolveBase uses to sync accepted solutions.",
-      },
-      { property: "og:type", content: "website" },
-      { property: "og:url", content: `${SITE_URL}/privacy` },
-    ],
-    links: [{ rel: "canonical", href: `${SITE_URL}/privacy` }],
-  }),
+  head: () =>
+    seoHead({
+      path: "/privacy",
+      title: "Privacy Policy | SolveBase",
+      description:
+        "How SolveBase handles GitHub authorization, coding-platform account data, and accepted solution source code.",
+    }),
   component: PrivacyPolicy,
 });
 
