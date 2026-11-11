@@ -624,7 +624,7 @@ export function buildReadme(synced, handle) {
   return `${README_MARKER}
 # Competitive Programming Solutions
 
-Accepted coding solutions, organized by platform.
+Synced automatically by SolveBase.
 
 **Total solved: ${total}**
 
@@ -639,8 +639,6 @@ ${codechef}
 ${gfg}
 
 _Last updated: ${new Date().toISOString().slice(0, 10)}_
-
-[Auto-synced by SolveBase](https://solvebase.dev/) — Topic & Rating-wise GitHub Sync for LeetCode, Codeforces, CodeChef, GfG & CSES.
 ${README_END_MARKER}
 `;
 }
