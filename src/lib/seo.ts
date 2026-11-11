@@ -1,6 +1,7 @@
 import {
   CHROME_WEB_STORE_URL,
   GITHUB_URL,
+  MINIMUM_CHROME_VERSION,
   PRODUCT_DESCRIPTION,
   PRODUCT_VERSION,
   SITE_URL,
@@ -30,7 +31,7 @@ const entitySchemas = [
     name: "SolveBase",
     applicationCategory: "DeveloperApplication",
     operatingSystem: "Windows, macOS, Linux",
-    softwareRequirements: "Google Chrome 112 or later, or a compatible Chromium-based browser",
+    softwareRequirements: `Google Chrome ${MINIMUM_CHROME_VERSION} or later, or a compatible Chromium-based browser`,
     description: PRODUCT_DESCRIPTION,
     softwareVersion: PRODUCT_VERSION,
     isAccessibleForFree: true,
@@ -45,7 +46,19 @@ const entitySchemas = [
     author: { "@id": `${SITE_URL}/#author` },
     publisher: { "@id": `${SITE_URL}/#organization` },
     softwareHelp: { "@type": "WebPage", "@id": `${SITE_URL}/getting-started#webpage` },
+    subjectOf: [{ "@id": `${SITE_URL}/#source` }, { "@id": `${SITE_URL}/how-it-works#article` }],
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD", url: CHROME_WEB_STORE_URL },
+  },
+  {
+    "@type": "SoftwareSourceCode",
+    "@id": `${SITE_URL}/#source`,
+    name: "SolveBase source code",
+    url: GITHUB_URL,
+    codeRepository: GITHUB_URL,
+    programmingLanguage: ["JavaScript", "TypeScript"],
+    version: PRODUCT_VERSION,
+    targetProduct: { "@id": `${SITE_URL}/#software` },
+    author: { "@id": `${SITE_URL}/#author` },
   },
   {
     "@type": "WebSite",
@@ -63,12 +76,16 @@ export function seoHead({
   path,
   schemas = [],
   faqs = [],
+  mainEntityId,
+  reviewedAt,
 }: {
   title: string;
   description: string;
   path: string;
   schemas?: Record<string, unknown>[];
   faqs?: FaqItem[];
+  mainEntityId?: string;
+  reviewedAt?: string;
 }) {
   const url = new URL(path, SITE_URL).href;
   const image = `${SITE_URL}/og-image.png`;
@@ -76,10 +93,18 @@ export function seoHead({
     meta: [
       { title },
       { name: "description", content: description },
-      { name: "robots", content: "index, follow, max-image-preview:large" },
+      {
+        name: "robots",
+        content: "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+      },
       { property: "og:title", content: title },
       { property: "og:description", content: description },
-      { property: "og:type", content: "website" },
+      {
+        property: "og:type",
+        content: schemas.some((schema) => schema["@type"] === "TechArticle")
+          ? "article"
+          : "website",
+      },
       { property: "og:url", content: url },
       { property: "og:site_name", content: "SolveBase" },
       { property: "og:locale", content: "en_US" },
@@ -112,7 +137,12 @@ export function seoHead({
               isPartOf: { "@id": `${SITE_URL}/#website` },
               about: { "@id": `${SITE_URL}/#software` },
               publisher: { "@id": `${SITE_URL}/#organization` },
-              ...(faqs.length ? { mainEntity: faqQuestions(faqs, url) } : {}),
+              ...(reviewedAt ? { lastReviewed: reviewedAt } : {}),
+              ...(faqs.length
+                ? { mainEntity: faqQuestions(faqs, url) }
+                : mainEntityId
+                  ? { mainEntity: { "@id": mainEntityId } }
+                  : {}),
               ...(schemas.some((schema) => schema["@type"] === "BreadcrumbList")
                 ? { breadcrumb: { "@id": `${url}#breadcrumb` } }
                 : {}),
