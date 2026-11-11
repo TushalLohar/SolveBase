@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { HOME_FAQS } from "../lib/answers";
 import { useState } from "react";
-import { faqSchema, seoHead, SITE_URL } from "../lib/seo";
+import { seoHead } from "../lib/seo";
+import { CHROME_WEB_STORE_URL, PRODUCT_DESCRIPTION } from "../lib/product";
 import {
   Download,
   FolderTree,
@@ -12,9 +14,6 @@ import {
   Layers,
 } from "lucide-react";
 
-const CHROME_WEB_STORE_URL =
-  "https://chromewebstore.google.com/detail/solvebase-solves-to-githu/caeobmhokccipmdinfcajpagikggollm";
-
 export const Route = createFileRoute("/")({
   head: () =>
     seoHead({
@@ -22,38 +21,7 @@ export const Route = createFileRoute("/")({
       title: "SolveBase — Competitive Programming Solutions to GitHub",
       description:
         "Save accepted Codeforces, LeetCode, CSES, CodeChef, and GeeksforGeeks solutions to GitHub automatically with the free SolveBase Chrome extension.",
-      schemas: [
-        {
-          "@type": "SoftwareApplication",
-          "@id": `${SITE_URL}/#software`,
-          name: "SolveBase",
-          applicationCategory: "DeveloperApplication",
-          operatingSystem: "Chrome, Edge, Brave, Arc",
-          description:
-            "A Chrome browser extension that automatically saves accepted Codeforces, LeetCode, CSES, CodeChef, and GeeksforGeeks solutions to GitHub.",
-          url: `${SITE_URL}/`,
-          downloadUrl: CHROME_WEB_STORE_URL,
-          softwareVersion: "1.0.0",
-          author: { "@type": "Person", name: "Tushal Lohar" },
-          offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-        },
-        {
-          "@type": "Organization",
-          "@id": `${SITE_URL}/#organization`,
-          name: "SolveBase",
-          url: `${SITE_URL}/`,
-          logo: `${SITE_URL}/solvebase-brand.png`,
-          sameAs: ["https://github.com/TushalLohar"],
-        },
-        {
-          "@type": "WebSite",
-          "@id": `${SITE_URL}/#website`,
-          name: "SolveBase",
-          url: `${SITE_URL}/`,
-          publisher: { "@id": `${SITE_URL}/#organization` },
-        },
-        faqSchema(FAQS),
-      ],
+      faqs: HOME_FAQS,
     }),
   component: Home,
 });
@@ -207,8 +175,8 @@ public:
 const FEATURES = [
   {
     icon: Radar,
-    title: "Instant Live Detection",
-    body: "Page observers catch the Accepted verdict the instant it lands, with intelligent live synchronization.",
+    title: "Accepted Solutions Only",
+    body: "Detects new submissions on supported pages and saves them after a final accepted verdict.",
   },
   {
     icon: FolderTree,
@@ -237,64 +205,6 @@ const FEATURES = [
   },
 ];
 
-const FAQS = [
-  {
-    question: "What does SolveBase do?",
-    answer:
-      "SolveBase detects newly accepted coding submissions and saves the source code to a GitHub repository using consistent platform-specific folders.",
-  },
-  {
-    question: "Which coding platforms does SolveBase support?",
-    answer:
-      "SolveBase supports Codeforces, standard LeetCode problem pages, CSES, CodeChef, and GeeksforGeeks. LeetCode contest and Explore editors are not supported in version 1.0.0.",
-  },
-  {
-    question: "Can I save Codeforces solutions to GitHub automatically?",
-    answer:
-      "Yes. SolveBase watches Codeforces verdicts, waits for the final accepted result, and commits the solution to a GitHub rating folder.",
-  },
-  {
-    question: "Can I save LeetCode solutions to GitHub automatically?",
-    answer:
-      "Yes. On standard LeetCode problem pages, SolveBase detects an accepted submission and saves the solution under an organized LeetCode topic folder in GitHub.",
-  },
-  {
-    question: "Does SolveBase support CodeChef, CSES, and GeeksforGeeks?",
-    answer:
-      "Yes. SolveBase supports accepted submissions from CodeChef, CSES, and GeeksforGeeks practice pages alongside Codeforces and standard LeetCode problems.",
-  },
-  {
-    question: "Does SolveBase upload source code to its own server?",
-    answer:
-      "No. The extension sends repository updates directly to GitHub. The SolveBase OAuth service handles only the short-lived GitHub authorization exchange.",
-  },
-  {
-    question: "Can SolveBase use an existing GitHub repository?",
-    answer:
-      "Yes. SolveBase can inspect compatible solution folders in an existing repository and preserve content outside its managed README summary block.",
-  },
-  {
-    question: "Does SolveBase import every old solved problem automatically?",
-    answer:
-      "No. SolveBase focuses on live accepted submissions. Existing compatible files are indexed when you connect a repository, but old platform submissions are not scraped in bulk.",
-  },
-  {
-    question: "How do I save coding solutions to GitHub automatically?",
-    answer:
-      "Install SolveBase from the Chrome Web Store, connect GitHub, choose a repository, and keep solving. When a supported judge reports an accepted verdict, SolveBase commits the solution directly to GitHub.",
-  },
-  {
-    question: "Is SolveBase free and which browsers support it?",
-    answer:
-      "SolveBase is free to install and works in Chromium-based browsers such as Chrome, Edge, Brave, and Arc. The extension uses Manifest V3 and does not require a SolveBase account.",
-  },
-  {
-    question: "Does SolveBase work for interview preparation?",
-    answer:
-      "Yes. It creates a searchable GitHub archive of accepted practice problems, making it easier to review patterns, show consistent practice, and keep a public coding portfolio up to date.",
-  },
-];
-
 function Home() {
   const [activePlatform, setActivePlatform] = useState("codeforces");
   const selectedPlatform =
@@ -320,10 +230,13 @@ function Home() {
           <a href="#how-it-works" className="nav-link">
             How it works
           </a>
+          <a href="/getting-started" className="nav-link">
+            Setup guide
+          </a>
           <a href="#platforms" className="nav-link">
             Platforms
           </a>
-          <a href="#faq-title" className="nav-link">
+          <a href="/faq" className="nav-link">
             FAQ
           </a>
         </nav>
@@ -346,9 +259,8 @@ function Home() {
             <span className="ink-highlight">Keep it.</span>
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
-            SolveBase quietly turns every accepted Codeforces, LeetCode, CSES, CodeChef, or
-            GeeksforGeeks submission into a clean, searchable GitHub archive. You focus on the
-            verdict. Your portfolio keeps growing.
+            {PRODUCT_DESCRIPTION} Solutions are organized by platform, and your README updates
+            automatically.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <a href={CHROME_WEB_STORE_URL} target="_blank" rel="noreferrer" className="cta-primary">
@@ -364,7 +276,7 @@ function Home() {
             </a>
           </div>
           <div className="mt-8 flex flex-wrap gap-x-6 gap-y-2 font-mono text-xs text-muted-foreground">
-            <span>Free forever</span>
+            <span>Free to install</span>
             <span>No personal tokens</span>
             <span>Manifest V3</span>
           </div>
@@ -619,7 +531,7 @@ function Home() {
               n: "01",
               icon: GitBranch,
               title: "Connect GitHub",
-              body: "Authorize once and pick the repository where your solutions belong.",
+              body: "Choose a public repository and your platforms, then authorize SolveBase with GitHub.",
             },
             {
               n: "02",
@@ -707,8 +619,8 @@ function Home() {
           behind the sync.
         </h2>
         <div className="faq-list mt-10">
-          {FAQS.map((item) => (
-            <details key={item.question}>
+          {HOME_FAQS.map((item) => (
+            <details key={item.id} id={item.id} className="scroll-mt-24">
               <summary>
                 <span className="faq-question">
                   <span className="faq-mark">?</span>
@@ -717,22 +629,35 @@ function Home() {
                 <span className="faq-toggle">+</span>
               </summary>
               <div className="faq-answer">
-                <p>{item.answer}</p>
+                <p id={`${item.id}-answer`}>{item.answer}</p>
                 <span className="faq-answer-line" />
               </div>
             </details>
           ))}
         </div>
+        <p className="mt-6 text-sm leading-7 text-muted-foreground">
+          Find platform-specific answers, GitHub permissions, and troubleshooting in the{" "}
+          <a href="/faq" className="font-semibold underline underline-offset-4">
+            full SolveBase FAQ
+          </a>
+          .
+        </p>
       </section>
 
-      <nav aria-label="Platform guides" className="border-t border-border py-8">
-        <h2 className="font-mono text-sm font-bold">Platform guides</h2>
+      <nav aria-label="SolveBase guides" className="border-t border-border py-8">
+        <h2 className="font-mono text-sm font-bold">SolveBase guides</h2>
         <div className="mt-3 flex flex-wrap gap-x-6 gap-y-3 text-sm">
+          <a href="/getting-started" className="underline underline-offset-4">
+            Setup, supported platforms, and troubleshooting
+          </a>
           <a href="/leetcode-to-github" className="underline underline-offset-4">
             Save LeetCode solutions to GitHub
           </a>
           <a href="/codeforces-to-github" className="underline underline-offset-4">
             Save Codeforces solutions to GitHub
+          </a>
+          <a href="/faq" className="underline underline-offset-4">
+            All SolveBase questions and answers
           </a>
         </div>
       </nav>
