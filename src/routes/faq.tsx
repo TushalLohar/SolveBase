@@ -61,6 +61,13 @@ function FaqPage() {
           </a>
           .
         </p>
+        <p className="mt-4 text-sm leading-7 text-muted-foreground">
+          For supporting references and a comparison with manual saving, read{" "}
+          <a href="/how-it-works" className="font-semibold underline underline-offset-4">
+            how SolveBase works
+          </a>
+          .
+        </p>
 
         <nav aria-label="Question topics" className="mt-10 border-y border-border py-6">
           <ul className="flex flex-wrap gap-x-6 gap-y-3 text-sm leading-6">
