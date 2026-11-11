@@ -23,6 +23,7 @@ const PROJECT_REPO_NAME = "SolveBase";
 const TEXT_ENCODER = new TextEncoder();
 const SETUP_FLOW_TTL_MS = 10 * 60 * 1000;
 const READY_JOB_TTL_MS = 24 * 60 * 60 * 1000;
+const CF_FINAL_VERDICT_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 
 let setupFlow = null;
 let readmeSyncTimer = null;
@@ -368,6 +369,26 @@ function schedulePendingProcessing(delayMs = 0) {
 }
 
 async function queueWatch(platform, tabId, data, submittedAt = Date.now()) {
+  if (platform === "codeforces") {
+    const config = await store.getConfig();
+    if (!config?.handle || config.platforms?.codeforces === false) return;
+    // Contest verdicts can take days. Keep each witnessed submit separately
+    // from the short-lived page witness and later submits in the same tab.
+    await pending.upsert({
+      id: `verdict:codeforces:witness:${tabId}:${submittedAt}`,
+      platform,
+      phase: "verdict",
+      tabId,
+      createdAt: submittedAt,
+      submittedAt,
+      expiresAt: submittedAt + CF_FINAL_VERDICT_TTL_MS,
+      nextAt: Date.now() + 1200,
+      attempts: 0,
+      data: { ...data, handle: config.handle },
+    });
+    schedulePendingProcessing(1200);
+    return;
+  }
   const id = watchJobId(platform, tabId);
   const existing = (await pending.list()).find((job) => job.id === id);
   await pending.upsert({
@@ -383,6 +404,31 @@ async function queueWatch(platform, tabId, data, submittedAt = Date.now()) {
     data: { ...(existing?.data || {}), ...data },
   });
   schedulePendingProcessing(1200);
+}
+
+async function queueCodeforcesVerdict(submission, handle, witness = null) {
+  const id = `verdict:codeforces:submission:${submission.id}`;
+  const existing = (await pending.list()).find((job) => job.id === id);
+  const now = Date.now();
+  const job = {
+    id,
+    platform: "codeforces",
+    phase: "verdict",
+    tabId: witness?.tabId ?? null,
+    createdAt: existing?.createdAt || witness?.createdAt || now,
+    submittedAt: Number(submission.creationTimeSeconds || 0) * 1000 || now,
+    expiresAt: existing?.expiresAt || witness?.expiresAt || now + CF_FINAL_VERDICT_TTL_MS,
+    nextAt: now + 60_000,
+    attempts: Number(existing?.attempts || witness?.attempts || 0) + 1,
+    data: {
+      handle,
+      submissionId: String(submission.id),
+      contestId: submission.contestId || submission.problem?.contestId || null,
+    },
+  };
+  if (witness) await pending.promote(witness, job);
+  else await pending.upsert(job);
+  schedulePendingProcessing(60_000);
 }
 
 async function queueReady(platform, submissionId, data, tabId, startProcessing = true) {
@@ -617,19 +663,38 @@ function retryDelay(attempts, requested = 0) {
 async function resolveWatchJob(job, config) {
   const data = job.data || {};
   if (job.platform === "codeforces") {
-    if (!config.handle || !data.problemIndex) return { status: "waiting" };
-    const recent = await cf.getRecentSubmissions(config.handle, 30);
-    const submission = recent.find((candidate) => {
+    if (!config.handle) return { status: "waiting" };
+    if (data.handle && data.handle.toLowerCase() !== config.handle.toLowerCase())
+      return { status: "rejected" };
+    if (data.submissionId) {
+      const submission = await cf.getSubmission(config.handle, data.submissionId, data.contestId);
+      if (!submission) return { status: "waiting" };
+      if (cf.isPendingSubmission(submission)) return { status: "pending-final", submission };
+      return submission.verdict === "OK"
+        ? { status: "accepted", submission }
+        : { status: "rejected" };
+    }
+    if (!data.problemIndex) return { status: "waiting" };
+    const matchesWitness = (candidate) => {
       const createdAt = Number(candidate.creationTimeSeconds || 0) * 1000;
       if (createdAt < Number(job.submittedAt || 0) - 5000) return false;
+      if (createdAt > Number(job.submittedAt || 0) + WITNESS_TTL_MS) return false;
       const candidateIndex = candidate.problem?.index || candidate.problemIndex || "";
       if (String(candidateIndex).toUpperCase() !== String(data.problemIndex).toUpperCase()) {
         return false;
       }
       const candidateContest = candidate.contestId || candidate.problem?.contestId || "";
       return !data.contestId || !candidateContest || String(candidateContest) === data.contestId;
-    });
-    if (!submission || cf.isPendingSubmission(submission)) return { status: "waiting" };
+    };
+    const recent = await cf.getRecentSubmissions(config.handle, 30);
+    let submission = recent.find(matchesWitness);
+    if (!submission && data.contestId) {
+      submission = (await cf.getContestSubmissions(config.handle, data.contestId)).find(
+        matchesWitness,
+      );
+    }
+    if (!submission) return { status: "waiting" };
+    if (cf.isPendingSubmission(submission)) return { status: "pending-final", submission };
     if (submission.verdict !== "OK") return { status: "rejected" };
     submission.source = data.source || null;
     return { status: "accepted", submission };
@@ -742,12 +807,19 @@ async function processPendingJob(job, config) {
   }
 
   const resolved = await resolveWatchJob(job, config);
+  if (resolved.status === "pending-final") {
+    await queueCodeforcesVerdict(resolved.submission, config.handle, job);
+    return;
+  }
   if (resolved.status === "rejected") {
     await pending.remove(job.id);
     return;
   }
   if (resolved.status !== "accepted" || !resolved.submission?.id) {
-    await postponePendingJob(job, retryDelay(Number(job.attempts || 0)));
+    await postponePendingJob(
+      job,
+      job.phase === "verdict" ? 60_000 : retryDelay(Number(job.attempts || 0)),
+    );
     return;
   }
 
@@ -904,6 +976,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
               throw new Error("Codeforces has not confirmed this accepted submission yet.");
             }
             if (!cf.isFinalAcceptedSubmission(match)) {
+              await queueCodeforcesVerdict(match, handle);
               const error = new Error(
                 "Codeforces has passed pretests but has not finished system testing yet.",
               );
@@ -1294,7 +1367,10 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
         };
         const synced = repository.synced || {};
         await gh.putReadme(token, owner, repo, synced, handle || "");
-        await store.clearWorkState();
+        const sameRepository =
+          previous?.owner?.toLowerCase() === owner.toLowerCase() &&
+          previous?.repo?.toLowerCase() === repo.toLowerCase();
+        if (!sameRepository) await store.clearWorkState();
         await store.set(store.KEYS.synced, synced);
         await store.setConfig(config);
         if (msg.payload.connect === true) {
@@ -1310,6 +1386,8 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
           if (key) session[key] = true;
         }
         await store.setSession(session);
+        schedulePendingProcessing(0);
+        scheduleRepositorySummary();
         finishSetupFlow("complete");
         return sendResponse({ ok: true, owner });
       } catch (err) {

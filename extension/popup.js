@@ -229,12 +229,12 @@ function render(state) {
     }
   }
 
-  if (!configured) return;
-
-  if (!setupPopulated && !editing) {
+  if (config && !setupPopulated && !editing) {
     populateForm(config);
     setupPopulated = true;
   }
+
+  if (!configured) return;
 
   if ($("repoLine")) {
     $("repoLine").textContent = `${config.owner}/${config.repo}`;

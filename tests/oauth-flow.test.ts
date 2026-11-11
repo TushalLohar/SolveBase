@@ -5,8 +5,8 @@ import exchangeHandler from "../api/oauth/github/exchange.ts";
 import startHandler from "../api/oauth/github/start.ts";
 import { sha256Base64Url } from "../server/oauth/crypto.ts";
 
-const extensionOrigin = "chrome-extension://mdceoheaomlhiijololigpfbpiplicda";
-const extensionRedirect = "https://mdceoheaomlhiijololigpfbpiplicda.chromiumapp.org/github";
+const extensionOrigin = "chrome-extension://caeobmhokccipmdinfcajpagikggollm";
+const extensionRedirect = "https://caeobmhokccipmdinfcajpagikggollm.chromiumapp.org/github";
 const redis = new Map<string, string>();
 const githubToken = `gho_${"a".repeat(36)}`;
 let githubExchangeCalls = 0;

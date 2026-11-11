@@ -1,6 +1,6 @@
 const DEFAULT_EXTENSION_REDIRECT =
-  "https://mdceoheaomlhiijololigpfbpiplicda.chromiumapp.org/github";
-const DEFAULT_EXTENSION_ORIGIN = "chrome-extension://mdceoheaomlhiijololigpfbpiplicda";
+  "https://caeobmhokccipmdinfcajpagikggollm.chromiumapp.org/github";
+const DEFAULT_EXTENSION_ORIGIN = "chrome-extension://caeobmhokccipmdinfcajpagikggollm";
 
 export type OAuthConfig = {
   githubClientId: string;

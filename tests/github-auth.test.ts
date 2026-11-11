@@ -36,7 +36,7 @@ const manifest = JSON.parse(fs.readFileSync("extension/manifest.json", "utf8")) 
 };
 assert.equal(manifest.key, undefined);
 
-const extensionId = "mdceoheaomlhiijololigpfbpiplicda";
+const extensionId = "caeobmhokccipmdinfcajpagikggollm";
 
 Object.assign(process.env, {
   GITHUB_CLIENT_ID: "test-client-id",
@@ -51,9 +51,18 @@ Object.assign(process.env, {
 
 const { getOAuthConfig } = await import("../server/oauth/config.ts");
 const config = getOAuthConfig();
-assert.equal(extensionId, "mdceoheaomlhiijololigpfbpiplicda");
+assert.ok(fs.readFileSync("src/routes/index.tsx", "utf8").includes(`/${extensionId}"`));
+assert.ok(
+  fs
+    .readFileSync(".env.example", "utf8")
+    .includes(`EXTENSION_ORIGIN=chrome-extension://${extensionId}`),
+);
 assert.equal(config.extensionOrigin, `chrome-extension://${extensionId}`);
 assert.equal(config.extensionRedirectUrl, `https://${extensionId}.chromiumapp.org/github`);
+delete process.env["EXTENSION_ORIGIN"];
+delete process.env["EXTENSION_REDIRECT_URL"];
+assert.equal(getOAuthConfig().extensionOrigin, config.extensionOrigin);
+assert.equal(getOAuthConfig().extensionRedirectUrl, config.extensionRedirectUrl);
 
 let nextResponse = new Response(null, { status: 500 });
 let authorization = "";

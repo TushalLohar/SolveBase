@@ -8,10 +8,7 @@ import {
   RefreshCcw,
   ShieldCheck,
   Terminal,
-  TriangleAlert,
-  Code2,
   Layers,
-  Sparkles,
 } from "lucide-react";
 
 const CHROME_WEB_STORE_URL =
@@ -93,47 +90,6 @@ export const Route = createFileRoute("/")({
   }),
   component: Home,
 });
-
-const RATINGS = [
-  { label: "800", tone: "text-rated-grey", border: "border-rated-grey/30" },
-  { label: "1000", tone: "text-rated-green", border: "border-rated-green/30" },
-  { label: "1200", tone: "text-rated-cyan", border: "border-rated-cyan/30" },
-  { label: "1600", tone: "text-rated-blue", border: "border-rated-blue/30" },
-  { label: "2100", tone: "text-rated-violet", border: "border-rated-violet/30" },
-  { label: "2400+", tone: "text-rated-orange", border: "border-rated-orange/30" },
-];
-
-const HERO_CHIP_COLORS = [
-  "bg-white",
-  "bg-[#b9ead4]",
-  "bg-[#c7e6ff]",
-  "bg-[#dcd0ff]",
-  "bg-[#ffd6e7]",
-  "bg-[#ffe1b3]",
-];
-
-const PASTELS = ["pastel-sky", "pastel-mint", "pastel-butter", "pastel-pink", "pastel-lilac"];
-
-const HERO_MARQUEE =
-  "Pushed to GitHub · Auto-foldered by rating · README that updates itself · Zero copy-paste · ";
-
-const HERO_CARDS = [
-  {
-    title: "Detects",
-    body: "Watches for your accepted verdict on five judges — no button to press.",
-    bg: "bg-[#c7e6ff]",
-  },
-  {
-    title: "Organizes",
-    body: "Files each solve by platform, rating and topic in a clean directory tree.",
-    bg: "bg-[#b9ead4]",
-  },
-  {
-    title: "Summarizes",
-    body: "Rewrites your README with live counts every time a solution lands.",
-    bg: "bg-[#ffe1b3]",
-  },
-];
 
 const PLATFORM_PREVIEWS = [
   {

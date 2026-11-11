@@ -44,7 +44,7 @@ Detailed description:
 
 ### `storage`
 
-Stores the user's selected repository, platform usernames, enabled-platform preferences, GitHub OAuth token, synchronization index, pending-submission retry state, and connection-health state locally in trusted Chrome extension storage. Settings remain until reset or uninstall, deduplication entries expire after thirty days, verdict witnesses expire after fifteen minutes, and accepted-solution retry records expire after twenty-four hours.
+Stores the user's selected repository, platform usernames, enabled-platform preferences, GitHub OAuth token, synchronization index, pending-submission retry state, and connection-health state locally in trusted Chrome extension storage. Settings remain until reset or uninstall, deduplication entries expire after thirty days, page witnesses expire after fifteen minutes, Codeforces final-verdict records expire after seven days, and accepted-solution retry records expire after twenty-four hours.
 
 ### `cookies`
 

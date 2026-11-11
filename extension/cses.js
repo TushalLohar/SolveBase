@@ -299,6 +299,12 @@ function extractSource(html) {
 
 // Extract programming language from result page.
 function extractLanguage(html) {
+  for (const row of html.matchAll(/<tr\b[^>]*>([\s\S]*?)<\/tr>/gi)) {
+    const cells = [...row[1].matchAll(/<t[dh]\b[^>]*>([\s\S]*?)<\/t[dh]>/gi)].map((cell) =>
+      decodeEntities(cell[1].replace(/<[^>]+>/g, "")).trim(),
+    );
+    if (/^(?:Language|Compiler)\s*:?$/i.test(cells[0] || "")) return cells[1] || "";
+  }
   const m =
     html.match(/(?:Language|Compiler)[:\s]*<[^>]*>([^<]+)/i) ||
     html.match(/(?:Language|Compiler)[:\s]*([a-zA-Z0-9+#.]+)/i);
@@ -322,50 +328,60 @@ function taskIdFromResult(html) {
   return html.match(/\/problemset\/task\/(\d+)/i)?.[1] || null;
 }
 
-async function fetchSource(sub) {
-  return paced(async () => {
-    let resultId = sub.resultId;
-    if (!resultId || resultId === sub.taskId || resultId === sub.id) {
-      const latest = await findLatestSubmission(sub.taskId || sub.id);
-      if (!latest) {
-        const err = new Error(`No submission found for CSES task ${sub.taskId || sub.id}`);
+// Metadata and source must describe the same accepted result. Cache only
+// verified results, so a pending verdict can still be checked again.
+const detailsCache = new Map();
+const DETAILS_CACHE_MAX = 50;
+
+async function submissionDetails(sub) {
+  const resultId = String(
+    sub.resultId || (await paced(() => findLatestSubmission(sub.taskId || sub.id))) || "",
+  );
+  if (!resultId) {
+    const err = new Error(`No submission found for CSES task ${sub.taskId || sub.id}`);
+    err.code = "unavailable";
+    throw err;
+  }
+  let details = detailsCache.get(resultId);
+  if (!details)
+    details = await paced(async () => {
+      const html = await getPageHtml(`/problemset/result/${resultId}/`);
+      if (!isSessionActive(html)) {
+        throw authError("CSES session expired — sign in to cses.fi, then retry");
+      }
+
+      if (!isAcceptedResult(html)) {
+        const err = new Error(`CSES submission #${resultId} is not accepted`);
         err.code = "unavailable";
         throw err;
       }
-      resultId = latest;
-    }
 
-    const html = await getPageHtml(`/problemset/result/${resultId}/`);
-    if (!isSessionActive(html)) {
-      throw authError("CSES session expired — sign in to cses.fi, then retry");
-    }
+      const source = extractSource(html);
+      if (!source) {
+        const err = new Error(`Could not read source from CSES submission #${resultId}`);
+        err.code = "unavailable";
+        throw err;
+      }
 
-    if (!isAcceptedResult(html)) {
-      const err = new Error(`CSES submission #${resultId} is not accepted`);
-      err.code = "unavailable";
-      throw err;
-    }
+      return { resultId, taskId: taskIdFromResult(html), language: extractLanguage(html), source };
+    });
+  if (sub.taskId && details.taskId && String(sub.taskId) !== details.taskId) {
+    const err = new Error(`CSES submission #${resultId} belongs to a different task`);
+    err.code = "unavailable";
+    throw err;
+  }
+  if (!detailsCache.has(resultId)) {
+    if (detailsCache.size >= DETAILS_CACHE_MAX)
+      detailsCache.delete(detailsCache.keys().next().value);
+    detailsCache.set(resultId, details);
+  }
+  // Keep task-only fallback calls pinned to the result chosen for metadata.
+  sub.resultId = resultId;
+  return details;
+}
 
-    const resultTaskId = taskIdFromResult(html);
-    if (sub.taskId && resultTaskId && String(sub.taskId) !== resultTaskId) {
-      const err = new Error(`CSES submission #${resultId} belongs to a different task`);
-      err.code = "unavailable";
-      throw err;
-    }
-
-    const source = extractSource(html);
-    if (!source) {
-      const err = new Error(`Could not read source from CSES submission #${resultId}`);
-      err.code = "unavailable";
-      throw err;
-    }
-
-    if (!sub.language) {
-      sub.language = extractLanguage(html);
-    }
-
-    return source;
-  });
+async function fetchSource(sub) {
+  return (await submissionDetails(sub)).source;
 }
 
 function submissionUrl(taskId) {
@@ -377,24 +393,25 @@ export const PLATFORM = {
   name: "cses",
   label: "CSES",
   async fetchMetadata(sub) {
+    const details = await submissionDetails(sub);
+    const taskId = sub.taskId || details.taskId || String(sub.id);
     let problemInfo = null;
     try {
       const map = await getProblemMap();
-      problemInfo = map[sub.taskId || sub.id];
+      problemInfo = map[taskId];
     } catch {
       // Fallback
     }
 
-    const taskId = sub.taskId || String(sub.id);
     const name = sanitizeName(problemInfo?.name || sub.name || sub.title || "Problem");
     const section = problemInfo?.section || sub.section || "misc";
     const folder = slugifySection(section);
-    const language = sub.language || "";
+    const language = details.language || sub.language || "";
     const ext = extFor(language);
 
     return {
       platform: "cses",
-      id: String(sub.resultId || sub.id),
+      id: details.resultId,
       key: taskId,
       title: name,
       language,

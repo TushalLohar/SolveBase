@@ -11,6 +11,8 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
+    "test": "node --experimental-strip-types --test tests/*.test.ts",
+    "typecheck": "tsc --noEmit",
     "test:github-auth": "node --experimental-strip-types tests/github-auth.test.ts",
     "test:oauth": "node --experimental-strip-types tests/oauth-flow.test.ts",
     "test:repository": "node --experimental-strip-types tests/repository-state.test.ts",
@@ -23,10 +25,15 @@
     "lint": "eslint .",
     "format": "prettier --write ."
   },
+  "overrides": {
+    "@typescript-eslint/typescript-estree": {
+      "minimatch": "^11.0.1"
+    }
+  },
   "dependencies": {
     "@tailwindcss/vite": "^4.2.1",
     "@tanstack/react-router": "^1.170.18",
-    "@tanstack/react-start": "^1.168.32",
+    "@tanstack/react-start": "^1.168.60",
     "@vercel/analytics": "^2.0.1",
     "lucide-react": "^0.575.0",
     "react": "^19.2.0",

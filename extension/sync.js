@@ -3,8 +3,7 @@
 // A content script detects an accepted submission it witnessed, the background
 // worker calls processLive(), and that call writes the solution to GitHub
 // before it returns. Failures retry a couple of times in-process, then report
-// failure so the content script can re-send. Nothing is ever parked, held, or
-// backfilled.
+// failure to the background worker, which retains accepted submissions for retry.
 
 import * as store from "./storage.js";
 import * as gh from "./github.js";
@@ -21,6 +20,7 @@ const TEXT_ENCODER = new TextEncoder();
 let writeChain = Promise.resolve();
 let summaryChain = Promise.resolve();
 
+/** @template T @param {() => Promise<T>} task */
 function runExclusive(task) {
   const result = writeChain.then(task, task);
   writeChain = result.then(
@@ -30,6 +30,7 @@ function runExclusive(task) {
   return result;
 }
 
+/** @template T @param {() => Promise<T>} task */
 function runSummaryExclusive(task) {
   const result = summaryChain.then(task, task);
   summaryChain = result.then(
@@ -113,15 +114,18 @@ async function writeOnce(config, platformName, submission) {
     importedCandidates.find(([, item]) => item.folder === meta.folder) || importedCandidates[0];
   const previousKey = importedFallback?.[0] || syncedKey;
   const previous = synced[previousKey] || null;
-  // Imported solutions keep the user's existing folder and filename. Once a
-  // matching problem is solved again, SolveBase updates that file in place.
+  // Keep imported folders and filename stems, but match the extension to the
+  // new solution's language. C++'s conventional aliases can stay as they are.
   const preserveImportedPath = Boolean(previous?.imported && previous?.path);
-  const targetPath = preserveImportedPath ? previous.path : meta.path;
+  let targetPath = preserveImportedPath ? previous.path : meta.path;
+  if (preserveImportedPath) {
+    const oldExt = previous.path.split(".").at(-1).toLowerCase();
+    const sameLanguage =
+      oldExt === meta.ext || (meta.ext === "cpp" && ["cc", "cxx"].includes(oldExt));
+    if (!sameLanguage) targetPath = previous.path.replace(/\.[^/.]+$/, `.${meta.ext}`);
+  }
   const targetFolder = preserveImportedPath ? previous.folder || meta.folder : meta.folder;
-  const stale =
-    previous && !preserveImportedPath && previous.path && previous.path !== targetPath
-      ? previous
-      : null;
+  const stale = previous && previous.path && previous.path !== targetPath ? previous : null;
   const existingKnown = Object.values(synced).some((item) => item?.path === targetPath);
 
   const writeResult = await gh.putFile(
@@ -140,12 +144,16 @@ async function writeOnce(config, platformName, submission) {
       config.owner,
       config.repo,
       stale.path,
-      `Move ${stale.title || syncedKey} to ${meta.path}`,
+      `Move ${stale.title || syncedKey} to ${targetPath}`,
     );
   }
 
   for (const [key, item] of Object.entries(synced)) {
-    if (key !== syncedKey && item?.path === targetPath) delete synced[key];
+    if (
+      key !== syncedKey &&
+      (key === previousKey || item?.path === targetPath || item?.path === stale?.path)
+    )
+      delete synced[key];
   }
   synced[syncedKey] = {
     platform: platformName,
@@ -160,7 +168,10 @@ async function writeOnce(config, platformName, submission) {
   await markProcessed(platformName, submission.id);
   await store.set(store.KEYS.readmeDirty, { at: Date.now(), id: crypto.randomUUID() });
 
-  return { outcome: writeResult.outcome || "synced", meta };
+  return {
+    outcome: writeResult.outcome || "synced",
+    meta: { ...meta, path: targetPath, folder: targetFolder },
+  };
 }
 
 export async function flushRepositorySummary() {

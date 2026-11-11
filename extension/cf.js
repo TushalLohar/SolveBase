@@ -114,6 +114,19 @@ export async function getRecentSubmissions(handle, count = 200) {
   return apiGet(`user.status?handle=${encodeURIComponent(handle)}&from=1&count=${count}`);
 }
 
+export async function getContestSubmissions(handle, contestId) {
+  return apiGet(
+    `contest.status?contestId=${encodeURIComponent(contestId)}&handle=${encodeURIComponent(handle)}&from=1&count=1000`,
+  );
+}
+
+export async function getSubmission(handle, submissionId, contestId) {
+  const submissions = contestId
+    ? await getContestSubmissions(handle, contestId)
+    : await getRecentSubmissions(handle, 1000);
+  return submissions.find((submission) => String(submission.id) === String(submissionId)) || null;
+}
+
 export async function getAcceptedSubmissions(handle, count = 200) {
   const list = await getRecentSubmissions(handle, count);
   return list.filter((s) => s.verdict === "OK");

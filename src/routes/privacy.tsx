@@ -31,7 +31,7 @@ const sections = [
     body: [
       "SolveBase stores your GitHub username, selected coding-platform usernames, enabled-platform settings, GitHub repository name, synchronization state, and GitHub authorization token in Chrome extension storage on your device. These account names identify the connected accounts but are used only to perform the requested synchronization.",
       "When you submit a solution, SolveBase reads the accepted submission's source code and basic problem metadata from the supported coding platform so it can create or update the matching file in your GitHub repository.",
-      "A pending submission witness may remain in Chrome extension storage for up to fifteen minutes while SolveBase waits for the verdict. If an accepted solution cannot reach GitHub immediately, its retry record, including any captured source code, may remain locally for up to twenty-four hours or until synchronization succeeds.",
+      "A pending submission witness may remain in Chrome extension storage for up to fifteen minutes while SolveBase waits for the verdict. Codeforces submission identifiers and problem metadata may remain locally for up to seven days while waiting for system testing to finish. If an accepted solution cannot reach GitHub immediately, its retry record, including any captured source code, may remain locally for up to twenty-four hours or until synchronization succeeds.",
     ],
   },
   {
@@ -72,7 +72,7 @@ const sections = [
     title: "Control and deletion",
     body: [
       "Disconnecting GitHub removes the saved GitHub authorization token from the extension. Resetting SolveBase removes its local settings, cached synchronization state, and connection data. Files already committed to GitHub remain in your repository until you delete them there.",
-      "Settings and repository synchronization state remain on the device until the user resets or uninstalls SolveBase. Submission deduplication records expire after thirty days, pending verdict witnesses expire after fifteen minutes, and accepted-solution retry records expire after twenty-four hours.",
+      "Settings and repository synchronization state remain on the device until the user resets or uninstalls SolveBase. Submission deduplication records expire after thirty days, page witnesses expire after fifteen minutes, Codeforces final-verdict records expire after seven days, and accepted-solution retry records expire after twenty-four hours.",
       "You can revoke SolveBase at any time from GitHub Settings under Applications.",
     ],
   },
@@ -96,7 +96,7 @@ function PrivacyPolicy() {
           SolveBase uses only the information needed to detect accepted submissions and save them to
           the GitHub repository you choose.
         </p>
-        <p className="mt-4 font-mono text-xs text-muted-foreground">Effective August 17, 2026</p>
+        <p className="mt-4 font-mono text-xs text-muted-foreground">Effective November 10, 2026</p>
       </header>
 
       <div className="divide-y divide-border">

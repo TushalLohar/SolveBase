@@ -43,7 +43,13 @@ older Codeforces repositories with rating folders at the repository root.
 SolveBase handles live submissions from Codeforces, standard LeetCode problem pages under
 `leetcode.com/problems/`, CSES, CodeChef problem pages, and GeeksforGeeks practice problems.
 LeetCode contest and Explore editors are not supported in version 1.0.0. Codeforces submissions that
-have passed only pretests are held until Codeforces reports a final accepted verdict.
+have passed only pretests are kept locally for up to seven days while waiting for a final verdict.
+Each witnessed Codeforces submission is tracked independently, including after leaving the tab or
+restarting Chrome. Only final accepted solutions are committed.
+
+Reconnecting the same GitHub account and repository preserves pending submissions and resumes retries.
+Changing the account or repository clears the old work queue so solutions cannot move to another destination.
+Imported solutions retain their existing folder and filename stem; a language change updates the file extension.
 
 When adopting an older repository, SolveBase indexes recognized platform folders and conventional
 solution filenames. Unrecognized scratch files in legacy rating folders are intentionally ignored.
@@ -58,4 +64,15 @@ solution filenames. Unrecognized scratch files in legacy rating folders are inte
 6. Keep `https://solvebase.dev` configured in both `extension/oauth.js` and `extension/manifest.json`.
 7. Redeploy Vercel, reload the unpacked extension, and test Connect GitHub.
 
+The production extension ID is `caeobmhokccipmdinfcajpagikggollm`, matching the website's Chrome Web Store link.
+Existing Vercel deployments must set both `EXTENSION_ORIGIN` and `EXTENSION_REDIRECT_URL` to the values
+in `.env.example`; environment overrides take precedence over the code defaults. An unpacked development
+extension has a different ID and needs matching overrides on a separate development OAuth backend.
+
 The GitHub client secret, Redis token, and encryption key must exist only in Vercel environment variables. Never prefix them with `VITE_`, expose them through frontend code, or commit a real `.env` file.
+
+## Checks
+
+Run `npm test`, `npm run typecheck`, `npm run lint`, `npm run build`, and `npm audit` before release.
+The scoped `minimatch` override supplies the patched matcher used by TypeScript ESLint until its
+upstream dependency range includes version 11.0.1 or newer.

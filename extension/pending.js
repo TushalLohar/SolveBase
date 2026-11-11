@@ -1,6 +1,7 @@
 import * as store from "./storage.js";
 
 const MAX_JOBS = 30;
+const PHASE_PRIORITY = { ready: 0, verdict: 1, watch: 2 };
 let mutationChain = Promise.resolve();
 
 function normalized(jobs) {
@@ -27,7 +28,7 @@ function mutate(change) {
     const next = normalized(change(jobs) || jobs)
       .sort((a, b) => {
         if (a.phase === b.phase) return Number(b.createdAt || 0) - Number(a.createdAt || 0);
-        return a.phase === "ready" ? -1 : 1;
+        return (PHASE_PRIORITY[a.phase] ?? 3) - (PHASE_PRIORITY[b.phase] ?? 3);
       })
       .slice(0, MAX_JOBS);
     await store.set(store.KEYS.pendingSubmissions, next);
@@ -39,6 +40,14 @@ function mutate(change) {
 
 export function upsert(job) {
   return mutate((jobs) => [job, ...jobs.filter((candidate) => candidate.id !== job.id)]);
+}
+
+// Replace a witnessed event with its verified submission ID in one write.
+export function promote(job, replacement) {
+  return mutate((jobs) => [
+    replacement,
+    ...jobs.filter((candidate) => candidate.id !== job.id && candidate.id !== replacement.id),
+  ]);
 }
 
 export function update(id, changes) {
