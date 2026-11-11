@@ -102,8 +102,3 @@ export async function clearWorkState() {
     remove(KEYS.readmeDirty),
   ]);
 }
-
-export async function clearRepositoryState() {
-  await clearWorkState();
-  await set(KEYS.synced, {});
-}
