@@ -1,6 +1,6 @@
 # How SolveBase Saves Coding Solutions to GitHub
 
-SolveBase is a free browser extension with public source code that automatically saves newly accepted LeetCode solutions by topic, Codeforces and CodeChef solutions by rating, GeeksforGeeks solutions by difficulty, and CSES solutions by section to a public GitHub repository, using GitHub OAuth and updating README summaries without manual access tokens.
+SolveBase is a free Chrome extension that automatically saves newly accepted Codeforces, LeetCode, CSES, CodeChef, and GeeksforGeeks solutions to a public GitHub repository.
 
 Documentation for SolveBase 1.0.0. Checked 2026-11-11.
 
