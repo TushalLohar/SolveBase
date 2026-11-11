@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { breadcrumbSchema, faqSchema, seoHead } from "../lib/seo";
 
-const SITE_URL = "https://solvebase.dev";
 const CHROME_URL =
   "https://chromewebstore.google.com/detail/solvebase-solves-to-githu/caeobmhokccipmdinfcajpagikggollm";
 
@@ -23,41 +23,27 @@ const FAQS = [
 ];
 
 export const Route = createFileRoute("/leetcode-to-github")({
-  head: () => ({
-    meta: [
-      { title: "Save LeetCode Solutions to GitHub Automatically | SolveBase" },
-      {
-        name: "description",
-        content:
-          "Automatically save accepted LeetCode solutions to GitHub. SolveBase organizes your practice code by topic and keeps your README updated.",
-      },
-      { name: "robots", content: "index, follow" },
-    ],
-    links: [{ rel: "canonical", href: `${SITE_URL}/leetcode-to-github` }],
-    scripts: [
-      {
-        type: "application/ld+json",
-        children: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "FAQPage",
-          mainEntity: FAQS.map((item) => ({
-            "@type": "Question",
-            name: item.question,
-            acceptedAnswer: { "@type": "Answer", text: item.answer },
-          })),
-        }),
-      },
-    ],
-  }),
+  head: () =>
+    seoHead({
+      path: "/leetcode-to-github",
+      title: "Save LeetCode Solutions to GitHub Automatically | SolveBase",
+      description:
+        "Automatically save accepted LeetCode solutions to GitHub. SolveBase organizes your practice code by topic and keeps your README updated.",
+      schemas: [breadcrumbSchema("LeetCode to GitHub", "/leetcode-to-github"), faqSchema(FAQS)],
+    }),
   component: LeetCodeGuide,
 });
 
 function LeetCodeGuide() {
   return (
     <main className="mx-auto min-h-[100dvh] max-w-4xl px-5 py-10 sm:px-8 sm:py-16">
-      <a className="font-mono text-sm font-bold text-primary" href="/">
-        ← SolveBase
-      </a>
+      <nav aria-label="Breadcrumb" className="font-mono text-sm text-muted-foreground">
+        <a className="font-bold text-primary" href="/">
+          SolveBase
+        </a>
+        <span aria-hidden="true"> / </span>
+        <span aria-current="page">LeetCode to GitHub</span>
+      </nav>
       <article className="mt-14">
         <p className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-accent">
           LeetCode → GitHub
@@ -109,6 +95,13 @@ function LeetCodeGuide() {
             ))}
           </div>
         </section>
+        <p className="mt-12 leading-7 text-muted-foreground">
+          Also practice competitive programming? Learn how to{" "}
+          <a href="/codeforces-to-github" className="font-semibold underline underline-offset-4">
+            save Codeforces solutions to GitHub
+          </a>{" "}
+          with rating folders and final-verdict checks.
+        </p>
       </article>
     </main>
   );
