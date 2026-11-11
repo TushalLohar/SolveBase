@@ -5,6 +5,8 @@
 // not belong to the submission (editorial/community snippets) and mismatch
 // problem titles.
 
+import { authError, transientError } from "./adapter-utils.js";
+
 const LC = "https://leetcode.com";
 const REQUEST_TIMEOUT = 20_000;
 
@@ -99,19 +101,6 @@ function pickPrimaryTopic(tags) {
 
 function problemUrl(slug) {
   return `${LC}/problems/${slug}/`;
-}
-
-function authError(message) {
-  const err = new Error(message);
-  err.code = "auth";
-  return err;
-}
-
-function transientError(message, retryAfterMs) {
-  const err = new Error(message);
-  err.code = "transient";
-  if (retryAfterMs) err.retryAfter = retryAfterMs;
-  return err;
 }
 
 // LeetCode throttles hard, and a throttled reply looks a lot like a signed-out
