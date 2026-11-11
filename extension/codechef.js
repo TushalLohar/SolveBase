@@ -4,6 +4,7 @@
 import * as store from "./storage.js";
 
 import { createPacer } from "./pace.js";
+import { sanitizeName, transientError, authError, decodeEntities } from "./adapter-utils.js";
 
 const pacer = createPacer({ min: 300, max: 10000 });
 const { paced, noteOutcome, throttleBackoffMs } = pacer;
@@ -38,44 +39,6 @@ const LANG_EXT = [
 function extFor(language) {
   const hit = LANG_EXT.find(([re]) => re.test(language || ""));
   return hit ? hit[1] : "cpp";
-}
-
-function sanitizeName(name) {
-  return (
-    (name || "Problem")
-      .replace(/[\\/:*?"<>|]/g, "-")
-      .replace(/[\u0000-\u001f]/g, "")
-      .replace(/\s+/g, " ")
-      .replace(/\.+$/, "")
-      .trim()
-      .slice(0, 80) || "Problem"
-  );
-}
-
-function transientError(message, retryAfterMs) {
-  const err = new Error(message);
-  err.code = "transient";
-  if (retryAfterMs) err.retryAfter = retryAfterMs;
-  return err;
-}
-
-function authError(message) {
-  const err = new Error(message);
-  err.code = "auth";
-  return err;
-}
-
-function decodeEntities(str) {
-  return str
-    .replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(Number(dec)))
-    .replace(/&#x([0-9a-fA-F]+);/g, (_, hex) => String.fromCharCode(parseInt(hex, 16)))
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&#0?39;/g, "'")
-    .replace(/&#x27;/g, "'")
-    .replace(/&nbsp;/g, " ")
-    .replace(/&amp;/g, "&");
 }
 
 export async function handleExists(handle) {
